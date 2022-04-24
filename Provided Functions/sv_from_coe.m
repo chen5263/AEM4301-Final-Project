@@ -7,12 +7,12 @@ classical orbital elements (coe).
 mu - gravitational parameter (km^3;s^2)
 coe - orbital elements [h e RA incl w TA]
 where
-h =angular momentum (km^2/s)
-e =eccentricity
-RA =right ascension of the ascending node (rad)
-incl =inclination of the orbit (rad)
-w =argument of perigee (rad)
-TA =true anomaly (rad)
+    h =angular momentum (km^2/s)
+    e =eccentricity
+    RA =right ascension of the ascending node (rad)
+    incl =inclination of the orbit (rad)
+    w =argument of perigee (rad)
+    TA =true anomaly (rad)
 R3_w - Rotation matrix about the z-axis through the angle w
 R1_i - Rotation matrix about the x-axis through the angle i
 R3_W - Rotation matrix about the z-axis through the angle RA

@@ -80,7 +80,10 @@ TA =zero_to_360...
 coe =[h e RA incl w TA a w_hat L M E/deg];
 %...Algorithm 4.5 (for which all angles must be in radians):
 [r, v] =sv_from_coe([h e RA*deg incl*deg w*deg TA*deg],mu);
+r(3) = 0;
+v(3) = 0;
 return
+
 % wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 function [J2000_coe, rates] =planetary_elements(planet_id)
 % wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
@@ -143,12 +146,13 @@ J2000_coe(1) =J2000_coe(1)*au;
 rates(1) =rates(1)*au;
 
 % Line to make the inclination angles the same (coplanar planets)
-J2000_coe(3) = 0.00000;
+J2000_coe(3) = 0;
 
 %...Convert from arcseconds to fractions of a degree:
 rates(3:6) =rates(3:6)/3600;
 rates(3) = 0;
 end %planetary_elements
+
 % wwwwwwwwwwwwwwwwwwwwwwwwwww
 function y =zero_to_360(x)
 % wwwwwwwwwwwwwwwwwwwwwwwwwww
@@ -165,5 +169,6 @@ x =x - (fix(x/360) - 1)*360;
 end
 y =x;
 end %zero_to_360
+
 end %planet_elements_and_sv
 % wwwwwwwwwwww
