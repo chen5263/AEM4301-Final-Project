@@ -161,7 +161,35 @@ end
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plots:
-
+% Venus, Earth, and Jupiter, Heliocentric over timespan on mission:
+PlanetOrbits = figure();
+hold on; axis equal; grid on;
+% plotOrbit2D(e, a, theta_start, theta_end, fig)
+% Venus: Mission duration > 1 Venus year, plot full orbit:
+[coe,~,~,~] = EZ_States('Venus',Dates{1});
+e = coe(2);
+a = coe(7);
+theta1 = 0;
+theta2 = 360;
+Venus_orbit = plotOrbit2D(e, a, theta1, theta2, PlanetOrbits);
+Venus_orbit.Color = 'g';
+% Earth: Mission duration > 1 Earth year, plot full orbit:
+[coe,~,~,~] = EZ_States('Earth',Dates{1});
+e = coe(2);
+a = coe(7);
+Earth_orbit = plotOrbit2D(e, a, theta1, theta2, PlanetOrbits);
+Earth_orbit.Color = 'b';
+% Jupiter: Year = 11.86 Earth Years, ~ 1/2 orbit expected
+[coe,~,~,~] = EZ_States('Jupiter',Dates{1});
+e = coe(2);
+a = coe(7);
+theta1 = coe(6);
+[coe,~,~,~] = EZ_States('Jupiter',Dates{6});
+theta2 = coe(6);
+Jupiter_orbit = plotOrbit2D(e, a, theta1, theta2, PlanetOrbits);
+Jupiter_orbit.Color = 'r';
+legend('Venus Orbit','Earth Orbit','Jupiter Partial Orbit','Location','southeast')
+title("Planetary orbits from Oct 18, 1989 to Dec 7, 1995")
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functions:
