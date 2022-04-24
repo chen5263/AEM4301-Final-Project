@@ -11,6 +11,7 @@
 clear all; close all; clc;
 Constants;
 mu_Sun = Sun.mu;
+
 % Project Report 1 - Part 4:
 
 % Date          Body    J2000 x (km)    J2000 y (km)
