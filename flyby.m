@@ -1,22 +1,12 @@
 function SpacecraftVel_after = flyby(PlanetVel, SpacecraftVel, mu, rp, VelDesired)
 % INPUTS:
-%   PlanetVel [2/3 by 1] (x,y)      km/s
-%   SpacecraftVel [2/3 by 1] (x,y)  km/s
+%   PlanetVel [2 by 1] (x,y)      km/s
+%   SpacecraftVel [2 by 1] (x,y)  km/s
 %       Incoming Velocity vector
 %   mu of the planet                km^3/s^2
 %   rp = radius at periapsis        km
 %   VelDesired = 2d velocity vector of the desired velocity for the new
 %                orbit (Optional)
-
-figure(); hold on; axis equal; grid on;
-
-% Planet Velocity vector (heliocentric)
-Px = PlanetVel(1);
-Py = PlanetVel(2);
-quiver(0,0,Px,Py,0);
-
-% Spacecraft Incoming (heliocentric)
-quiver(0,0,SpacecraftVel(1),SpacecraftVel(2),0);
 
 % V_inf_minus:
 V_inf_minus = SpacecraftVel - PlanetVel;
@@ -51,5 +41,29 @@ if nargin == 5
         SpacecraftVel_after = vV_post2;
     end
 end
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plotting it!
+fig = figure(); hold on; axis equal; grid on;
+
+% Planet Velocity vector (heliocentric)
+Px = PlanetVel(1);
+Py = PlanetVel(2);
+quiver(0,0,Px,Py,0);
+
+% Spacecraft Incoming (heliocentric)
+quiver(0,0,SpacecraftVel(1),SpacecraftVel(2),0);
+
+% Spacecraft Incoming velocity (vInf_minus) (planet-centric)
+quiver(Px, Py, V_inf_minus(1), V_inf_minus(2), 0);
+
+% Spacecraft Outgoing velocity (vInf_plus) (planet-centric)
+V_inf_plus = SpacecraftVel_after-PlanetVel;
+quiver(Px, Py, V_inf_Plus(1), V_inf_plus(2), 0);
+
+% Spacecraft Outgoing Velocity (heliocentric)
+quiver(0,0, SpacecraftVel_after(1),SpacecraftVel_after(2),0);
+legend("Planet Velocity", "Spacecraft Heliocentric Prior", ...
+    "V_\infty^-","V_\infty^+", "Spacecraft Heliocentric Post")
 
 end
