@@ -36,6 +36,8 @@ Dates{4} = MakeDate(1991,10,29);
 Dates{5} = MakeDate(1992,12,8);
 Dates{6} = MakeDate(1995,12,7);
 
+velocity_array = ones(5,4);
+
 PlanetOrder = {'Earth','Venus','Earth','Gaspra','Earth','Jupiter'};
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Table 1:
@@ -101,6 +103,11 @@ for Lv1 = 1:5
     t2 = datevec(Dates{Lv1+1});
     deltaT = etime(t2,t1);
     [V1,V2] = lambert(r1,r2,deltaT, 'pro', mu_Sun);
+    velocity_array(Lv1,1) = V1(1);
+    velocity_array(Lv1,2) = V1(2);
+    velocity_array(Lv1,3) = V2(1);
+    velocity_array(Lv1,4) = V2(2);
+
     coe_transfer{Lv1} = coe_from_sv(r1,V1, mu_Sun);
     
     flatline = pad('',80,'-');
@@ -191,6 +198,88 @@ Jupiter_orbit = plotOrbit2D(e, a, theta1, theta2, PlanetOrbits);
 Jupiter_orbit.Color = 'r';
 legend('Venus Orbit','Earth Orbit','Jupiter Partial Orbit','Location','southeast')
 title("Planetary orbits from Oct 18, 1989 to Dec 7, 1995")
+hold off
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Vector Diagrams
+figure1 = figure();
+hold on;
+title("Venus Flyby")
+%velocity vectors
+p1 = [0,0];                                     % first
+p2 = [velocity_array(1,3) velocity_array(1,4)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),0,'red')           % incoming velocity
+%text(velocity_array(1,3), velocity_array(1,4),"Incoming");
+
+p1 = [0 0];                                        % first
+p2 = [velocity_array(2,1) velocity_array(2,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),0,'green')         % outgoing velocity
+%text(velocity_array(2,1), velocity_array(2,2),"Outgoing");
+
+p1 = [velocity_array(1,3) velocity_array(1,4)];    % first
+p2 = [velocity_array(2,1) velocity_array(2,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),1,'blue')         % delta v
+
+p1 = [0 0];    % first
+p2 = [v{2}(1) v{2}(2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),1,'black')         % Venus velocity
+
+p1 = [v{2}(1) v{2}(2)];    % first
+p2 = [velocity_array(1,3) velocity_array(1,4)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),1,'cyan')         % Venus centered incoming
+
+p1 = [v{2}(1) v{2}(2)];    % first
+p2 = [velocity_array(2,1) velocity_array(2,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),1,'cyan')         % Venus centered incoming
+
+legend("Incoming Velocity","Outgoing Velocity", "Delta Velocity","Venus Velocity"...
+    );
+grid on;
+hold off;
+
+figure2 = figure();
+hold on;
+title("Earth Flyby 1")
+%velocity vectors
+p1 = [0,0];     % first
+p2 = [velocity_array(2,3) velocity_array(2,4)];                                        % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),0,'red')           % incoming velocity
+p1 = [0 0];                                       % first
+p2 = [velocity_array(3,1) velocity_array(3,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),0,'green')         % outgoing velocity
+p1 = [velocity_array(2,3) velocity_array(2,4)];   % first
+p2 = [velocity_array(3,1) velocity_array(3,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),1,'blue')         % delta v
+grid on;
+hold off;
+
+figure3 = figure();
+hold on;
+title("Earth Flyby 2")
+%velocity vectors
+p1 = [0,0];     % first
+p2 = [velocity_array(4,3) velocity_array(4,4)];                                        % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),0,'red')           % incoming velocity
+p1 = [0 0];                                        % first
+p2 = [velocity_array(5,1) velocity_array(5,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),0,'green')         % outgoing velocity
+p1 = [velocity_array(4,3) velocity_array(4,4)];   % first
+p2 = [velocity_array(5,1) velocity_array(5,2)];   % Second
+dp = p2-p1;                                       % Difference
+quiver(p1(1),p1(2),dp(1),dp(2),1,'blue')         % delta v
+grid on;
+hold off;
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functions:
