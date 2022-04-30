@@ -7,6 +7,7 @@
 %
 % File History: 
 % Written 4/23 - Logan
+% Worked on code - all group memebers
 
 clear all; close all; clc;
 Constants;
@@ -109,6 +110,7 @@ for Lv1 = 1:5
     velocity_array(Lv1,4) = V2(2);
 
     coe_transfer{Lv1} = coe_from_sv(r1,V1, mu_Sun);
+    coe_end_of_conic{Lv1} = coe_from_sv(r2,V2, mu_Sun);
     
     flatline = pad('',80,'-');
     disp(flatline)
@@ -201,27 +203,40 @@ title("Planetary orbits from Oct 18, 1989 to Dec 7, 1995")
 hold off
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Vector Diagrams
+%% Transfer 1
+
+u_v = 324859;
+v_spacecraft_minus = [velocity_array(1,3) velocity_array(1,4)];
+v_venus = [v{2}(1) v{2}(2)];
+v_spacecraft_minus_norm = norm([velocity_array(1,3) velocity_array(1,4)])
+v_venus_norm = norm([v{2}(1) v{2}(2)])
+disp("Spacecraft is moving faster than Venus");
+
+gamma = @(theta,e) atan(e*sin(theta)/(1+e*cos(theta)));
+
+flight_path_angle = gamma(coe_end_of_conic{1}(6),coe_end_of_conic{1}(2))
+
+v_inf = v_spacecraft_minus - v_venus;
+
+v_inf = norm(v_inf)
+
+a = u_v/(v_inf)^2
+
+e = Venus.minPeriapsis/a +1;
+
+flyby = 2*asin(1/e)
+
+delta_v = sqrt(2*v_inf^2+2*v_inf^2*cos(flyby))
+
+%{
 figure1 = figure();
 hold on;
-title("Venus Flyby")
+title("Venus Flyby");
 %velocity vectors
-p1 = [0,0];                                     % first
+p1 = [0,0];                                       % first
 p2 = [velocity_array(1,3) velocity_array(1,4)];   % Second
 dp = p2-p1;                                       % Difference
 quiver(p1(1),p1(2),dp(1),dp(2),0,'red')           % incoming velocity
-%text(velocity_array(1,3), velocity_array(1,4),"Incoming");
-
-p1 = [0 0];                                        % first
-p2 = [velocity_array(2,1) velocity_array(2,2)];   % Second
-dp = p2-p1;                                       % Difference
-quiver(p1(1),p1(2),dp(1),dp(2),0,'green')         % outgoing velocity
-%text(velocity_array(2,1), velocity_array(2,2),"Outgoing");
-
-p1 = [velocity_array(1,3) velocity_array(1,4)];    % first
-p2 = [velocity_array(2,1) velocity_array(2,2)];   % Second
-dp = p2-p1;                                       % Difference
-quiver(p1(1),p1(2),dp(1),dp(2),1,'blue')         % delta v
 
 p1 = [0 0];    % first
 p2 = [v{2}(1) v{2}(2)];   % Second
@@ -233,35 +248,85 @@ p2 = [velocity_array(1,3) velocity_array(1,4)];   % Second
 dp = p2-p1;                                       % Difference
 quiver(p1(1),p1(2),dp(1),dp(2),1,'cyan')         % Venus centered incoming
 
-p1 = [v{2}(1) v{2}(2)];    % first
-p2 = [velocity_array(2,1) velocity_array(2,2)];   % Second
-dp = p2-p1;                                       % Difference
-quiver(p1(1),p1(2),dp(1),dp(2),1,'cyan')         % Venus centered incoming
+legend("Incoming Velocity","Venus Velocity")
 
-legend("Incoming Velocity","Outgoing Velocity", "Delta Velocity","Venus Velocity"...
-    );
 grid on;
 hold off;
+%}
+%% Transfer 2
 
+u_e = Earth.mu;
+v_spacecraft_minus = [velocity_array(2,3) velocity_array(2,4)];
+v_earth = [v{3}(1) v{3}(2)];
+v_spacecraft_minus_norm = norm(v_spacecraft_minus)
+v_earth_norm = norm(v_earth)
+disp("Earth is moving faster than the spacecraft.");
+
+gamma = @(theta,e) atan(e*sin(theta)/(1+e*cos(theta)));
+
+flight_path_angle = gamma(coe_end_of_conic{2}(6),coe_end_of_conic{2}(2))
+
+v_inf = v_spacecraft_minus - v_earth;
+
+v_inf = norm(v_inf)
+
+a = u_e/(v_inf)^2
+
+e = Earth.minPeriapsis/a +1;
+
+flyby = 2*asin(1/e)
+
+delta_v = sqrt(2*v_inf^2+2*v_inf^2*cos(flyby))
+
+%{
 figure2 = figure();
 hold on;
 title("Earth Flyby 1")
 %velocity vectors
-p1 = [0,0];     % first
-p2 = [velocity_array(2,3) velocity_array(2,4)];                                        % Second
+p1 = [0,0];                                       % first
+p2 = [velocity_array(2,3) velocity_array(2,4)];   % Second
 dp = p2-p1;                                       % Difference
 quiver(p1(1),p1(2),dp(1),dp(2),0,'red')           % incoming velocity
-p1 = [0 0];                                       % first
-p2 = [velocity_array(3,1) velocity_array(3,2)];   % Second
+
+p1 = [0 0];    % first
+p2 = [v{2}(1) v{2}(2)];   % Second
 dp = p2-p1;                                       % Difference
-quiver(p1(1),p1(2),dp(1),dp(2),0,'green')         % outgoing velocity
-p1 = [velocity_array(2,3) velocity_array(2,4)];   % first
-p2 = [velocity_array(3,1) velocity_array(3,2)];   % Second
+quiver(p1(1),p1(2),dp(1),dp(2),1,'black')         % Venus velocity
+
+p1 = [v{2}(1) v{2}(2)];    % first
+p2 = [velocity_array(1,3) velocity_array(1,4)];   % Second
 dp = p2-p1;                                       % Difference
-quiver(p1(1),p1(2),dp(1),dp(2),1,'blue')         % delta v
+quiver(p1(1),p1(2),dp(1),dp(2),1,'cyan')         % Venus centered incoming
 grid on;
 hold off;
+%}
 
+%% Transfer 3
+
+u_e = Earth.mu;
+v_spacecraft_minus = [velocity_array(4,3) velocity_array(4,4)];
+v_earth = [v{5}(1) v{5}(2)];
+v_spacecraft_minus_norm = norm(v_spacecraft_minus)
+v_earth_norm = norm(v_earth)
+disp("Earth is moving faster than the spacecraft.");
+
+gamma = @(theta,e) atan(e*sin(theta)/(1+e*cos(theta)));
+
+flight_path_angle = gamma(coe_end_of_conic{4}(6),coe_end_of_conic{4}(2))
+
+v_inf = v_spacecraft_minus - v_earth;
+
+v_inf = norm(v_inf)
+
+a = u_e/(v_inf)^2
+
+e = Earth.minPeriapsis/a +1;
+
+flyby = 2*asin(1/e)
+
+delta_v = sqrt(2*v_inf^2+2*v_inf^2*cos(flyby))
+
+%{
 figure3 = figure();
 hold on;
 title("Earth Flyby 2")
@@ -280,7 +345,7 @@ dp = p2-p1;                                       % Difference
 quiver(p1(1),p1(2),dp(1),dp(2),1,'blue')         % delta v
 grid on;
 hold off;
-
+%}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functions:
 function [J2000x, J2000y] = GetPos(Planet,DateTime)
