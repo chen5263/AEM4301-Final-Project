@@ -78,11 +78,11 @@ for di = 1:size(datesPlanets,1)
     
     plot3(rs(:,1),rs(:,2),rs(:,3),'-','Color',planetColor(di));
 end
+    plot3(rObject(oi,1),rObject(oi,2),rObject(oi,3),'o','Color',objectColor(oi));
 
 % loop through all objects
 for oi = 1:size(datesObjects,1)
     % plot marker for appropriate date
-    plot3(rObject(oi,1),rObject(oi,2),rObject(oi,3),'o','Color',objectColor(oi));
     textToAdd = sprintf('%d-%d-%d\n %c' ,  datesObjects(oi,1:3), charObjects(oi));
     text(rObject(oi,1),rObject(oi,2),rObject(oi,3),textToAdd);
     axis equal; view(0,90);
