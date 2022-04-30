@@ -1,33 +1,40 @@
-% wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 function coe =coe_from_sv(R,V,mu)
-% wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-%{
 % This function computes the classical orbital elements (coe)
 % from the state vector (R,V) using Algorithm 4.1.
 %
-mu - gravitational parameter (km^3/s^2)
-R - position vector in the geocentric equatorial frame (km)
-V - velocity vector in the geocentric equatorial frame (km)
-r, v - the magnitudes of R and V
-vr - radial velocity component (km/s)
-H - the angular momentum vector (km^2/s)
-h - the magnitude of H (km^2/s)
-incl - inclination of the orbit (rad)
-N - the node line vector (km^2/s)
-n - the magnitude of N
-cp - cross product of N and R
-RA - right ascension of the ascending node (rad)
-E - eccentricity vector
-e - eccentricity (magnitude of E)
-eps - a small number below which the eccentricity is considered
-to be zero
-w - argument of perigee (rad)
-TA - true anomaly (rad)
-a - semimajor axis (km)
-pi - 3.1415926...
-coe - vector of orbital elements [h e RA incl w TA a]
-User M-functions required: None
-%}
+%              vvvvvvvvvv
+% ALL ANGLES IN RADIANS!
+%              ^^^^^^^^^^
+%
+% INPUTS:
+%   R - position vector in the geocentric equatorial frame (km)
+%   V - velocity vector in the geocentric equatorial frame (km)
+%   mu - gravitational parameter (km^3/s^2)
+%
+% OUTPUTS:
+%   coe =[h e RA incl w TA a];
+%   Where:
+%       h - the magnitude of H (km^2/s) (angular momentum)
+%       e - eccentricity (magnitude of E)
+%       RA - right ascension of the ascending node (rad)
+%       incl - inclination of the orbit (rad)
+%       w - argument of perigee (rad)
+%       TA - true anomaly (rad)
+%       a - semimajor axis (km)
+%
+% Internal variables:
+%   r, v - the magnitudes of R and V
+%   vr - radial velocity component (km/s)
+%   H - the angular momentum vector (km^2/s)
+%   N - the node line vector (km^2/s)
+%   n - the magnitude of N
+%   cp - cross product of N and R
+%   E - eccentricity vector
+%   eps - a small number below which the eccentricity is considered
+%         to be zero
+%   pi - 3.1415926...
+%
+% User M-functions required: None
 
 % ---------------------------------------------
 eps =1.e-10;
@@ -36,52 +43,59 @@ v =norm(V);
 vr =dot(R,V)/r;
 H =cross(R,V);
 h =norm(H);
+
 %...Equation 4.7:
 incl =acos(H(3)/h);
+
 %...Equation 4.8:
 N =cross([0 0 1],H);
 n =norm(N);
+
 %...Equation 4.9:
 if n ~=0
-RA =acos(N(1)/n);
-if N(2) < 0
-RA =2*pi - RA;
-end
+    RA =acos(N(1)/n);
+    if N(2) < 0
+        RA =2*pi - RA;
+    end
 else
-RA =0;
+    RA =0;
 end
+
 %...Equation 4.10:
 e_hat =1/mu*((v^2 - mu/r)*R - r*vr*V);
 e =norm(e_hat);
+
 %...Equation 4.12 (incorporating the case e =0):
 if n ~=0
-if e > eps
-w =acos(dot(N,e_hat)/n/e);
-if e_hat(3) < 0
-w =2*pi - w;
-end
+    if e > eps
+        w =acos(dot(N,e_hat)/n/e);
+        if e_hat(3) < 0
+            w =2*pi - w;
+        end
+    else
+        w =0;
+    end
 else
-w =0;
+    w =0;
 end
-else
-w =0;
-end
+
 %...Equation 4.13a (incorporating the case e =0):
 if e > eps
-TA =acos(dot(e_hat,R)/e/r);
-if vr < 0
-TA =2*pi - TA;
-end
+    TA =acos(dot(e_hat,R)/e/r);
+    if vr < 0
+        TA =2*pi - TA;
+    end
 else
-cp =cross(N,R);
-if cp(3) >=0
-TA =acos(dot(N,R)/n/r);
-else
-TA =2*pi - acos(dot(N,R)/n/r);
+    cp =cross(N,R);
+    if cp(3) >=0
+        TA =acos(dot(N,R)/n/r);
+    else
+        TA =2*pi - acos(dot(N,R)/n/r);
+    end
 end
-end
+
 %...Equation 4.62 (a < 0 for a hyperbola):
 a =h^2/mu/(1 - e^2);
+
 coe =[h e RA incl w TA a];
 end %coe_from_sv
-% wwwwwwwwwwwww
