@@ -2,6 +2,10 @@ function coe =coe_from_sv(R,V,mu)
 % This function computes the classical orbital elements (coe)
 % from the state vector (R,V) using Algorithm 4.1.
 %
+%              vvvvvvvvvv
+% ALL ANGLES IN RADIANS!
+%              ^^^^^^^^^^
+%
 % INPUTS:
 %   R - position vector in the geocentric equatorial frame (km)
 %   V - velocity vector in the geocentric equatorial frame (km)

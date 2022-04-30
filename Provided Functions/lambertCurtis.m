@@ -1,39 +1,43 @@
-% wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-function [V1, V2] =lambertCurtis( mu,R1, R2, t, string)
-% wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-%{
-This function solves Lambert's problem.
-mu - gravitational parameter (km^3/s^2)
-R1, R2 - initial and final position vectors (km)
-r1, r2 - magnitudes of R1 and R2
-t - the time of flight from R1 to R2 (a constant) (s)
-V1, V2 - initial and final velocity vectors (km/s)
-c12 - cross product of R1 into R2
-theta - angle between R1 and R2
-string - 'pro'if the orbit is prograde
-'retro'if the orbit is retrograde
-A - a constant given by Equation 5.35
-z - alpha*x^2, where alpha is the reciprocal of the
-semimajor axis and x is the universal anomaly
-y(z) - a function of z given by Equation 5.38
-F(z,t) - a function of the variable z and constant t,
-- given by Equation 5.40
-dFdz(z) - the derivative of F(z,t), given by Equation 5.43
-ratio - F/dFdz
-tol - tolerance on precision of convergence
-nmax - maximum number of iterations of Newton's procedure
-f, g - Lagrange coefficients
-gdot - time derivative of g
-C(z), S(z) - Stumpff functions
-dum - a dummy variable
-User M-functions required: stumpC and stumpS
-%}
+
+function [V1, V2] =lambertCurtis( mu, R1, R2, t, string)
+% This function solves Lambert's problem.
+% INPUT and OUTPUT vectors (R1,R2,V1,V2) are in heliocentric frame.
+% INPUTS:
+%     mu - gravitational parameter (km^3/s^2)
+%     R1, R2 - initial and final position vectors (km)
+%     t - the time of flight from R1 to R2 (a constant) (s)
+%     string - 'pro'if the orbit is prograde
+%              'retro'if the orbit is retrograde
+% OUTPUTS:
+%     V1, V2 - initial and final velocity vectors (km/s)
+% 
+% Internal variables:
+%     r1, r2 - magnitudes of R1 and R2
+%     c12 - cross product of R1 into R2
+%     theta - angle between R1 and R2
+%     A - a constant given by Equation 5.35
+%     z - alpha*x^2, where alpha is the reciprocal of the
+%     semimajor axis and x is the universal anomaly
+%     y(z) - a function of z given by Equation 5.38
+%     F(z,t) - a function of the variable z and constant t,
+%     - given by Equation 5.40
+%     dFdz(z) - the derivative of F(z,t), given by Equation 5.43
+%     ratio - F/dFdz
+%     tol - tolerance on precision of convergence
+%     nmax - maximum number of iterations of Newton's procedure
+%     f, g - Lagrange coefficients
+%     gdot - time derivative of g
+%     C(z), S(z) - Stumpff functions
+%     dum - a dummy variable
+% User M-functions required: stumpC and stumpS (included at end of file)
+
 % ----------------------------------------------
 %...Magnitudes of R1 and R2:
 r1 =norm(R1);
 r2 =norm(R2);
 c12 =cross(R1, R2);
 theta =acos(dot(R1,R2)/r1/r2);
+
 %...Determine whether the orbit is prograde or retrograde:
 if nargin < 4 ||(~strcmp(string,'retro') & ( ~strcmp(string,'pro')))
     string ='pro';
@@ -48,6 +52,7 @@ elseif strcmp(string,'retro')
         theta =2*pi - theta;
     end
 end
+
 %...Equation 5.35:
 A =sin(theta)*sqrt(r1*r2/(1 - cos(theta)));
 %...Determine approximately where F(z,t) changes sign, and
@@ -94,6 +99,7 @@ end
 function dum =F(z,t)
     dum =(y(z)/C(z))^1.5*S(z) + A*sqrt(y(z)) - sqrt(mu)*t;
 end
+
 %...Equation 5.43:
 function dum =dFdz(z)
     if z ==0
@@ -104,6 +110,7 @@ function dum =dFdz(z)
         + A*sqrt(C(z)/y(z)));
     end
 end
+
 %...Stumpff functions:
 function dum =C(z)
     dum =stumpC(z);
@@ -111,19 +118,19 @@ end
 function dum =S(z)
     dum =stumpS(z);
 end
+
 end %lambert
-% wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+
 
 % wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 function s =stumpS(z)
     % wwwwwwwwwwwwwwwwwwwwww
-    %{
-    This function evaluates the Stumpff function S(z) according
-    to Equation 3.52.
-    z - input argument
-    s - value of S(z)
-    User M-functions required: none
-    %}
+%     This function evaluates the Stumpff function S(z) according
+%     to Equation 3.52.
+%     z - input argument
+%     s - value of S(z)
+%     User M-functions required: none
+
     % ----------------------------------------------
     if z > 0
         s =(sqrt(z) - sin(sqrt(z)))/(sqrt(z))^3;
@@ -138,13 +145,12 @@ end
 % wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 function c =stumpC(z)
     % wwwwwwwwwwwwwwwwwwwwww
-    %{
-    This function evaluates the Stumpff function C(z) according
-    to Equation 3.53.
-    z - input argument
-    c - value of C(z)
-    User M-functions required: none
-    %}
+%     This function evaluates the Stumpff function C(z) according
+%     to Equation 3.53.
+%     z - input argument
+%     c - value of C(z)
+%     User M-functions required: none
+
     % ----------------------------------------------
     if z > 0
         c =(1 - cos(sqrt(z)))/z;
