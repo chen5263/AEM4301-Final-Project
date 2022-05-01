@@ -38,7 +38,7 @@ Dates{6} = MakeDate(1995,12,7);
 
 PlanetOrder = {'Earth','Venus','Earth','Gaspra','Earth','Jupiter'};
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Table 1:
+%% Table 1:
 disp('Table 1:')
 disp([pad('Date ',12,'right'), '| ', ...
     pad('Body',8,'right'), '| ', ...
@@ -57,7 +57,7 @@ for Lv1 = 1:6
 end
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Table 2:
+%% Table 2:
 
 % Define Planet Orbital Elements (COE), Locations (r) and Velocity Vectors 
 % (v) at specified times:
@@ -120,7 +120,7 @@ for Lv1 = 1:5
 end
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Table 3:
+%% Table 3:
 
 disp(' ')
 disp('Table 3:')
@@ -161,7 +161,7 @@ end
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots:
+%% Plots:
 % Venus, Earth, and Jupiter, Heliocentric over timespan on mission:
 PlanetOrbits = figure();
 hold on; axis equal; grid on;
@@ -192,8 +192,11 @@ Jupiter_orbit.Color = 'r';
 legend('Venus Orbit','Earth Orbit','Jupiter Partial Orbit','Location','southeast')
 title("Planetary orbits from Oct 18, 1989 to Dec 7, 1995")
 
+% Encounter Locations:
+
+
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functions:
+%% Functions:
 function [J2000x, J2000y] = GetPos(Planet,DateTime)
 try
     [~,r,~, ~] = EZ_States(Planet,DateTime);
