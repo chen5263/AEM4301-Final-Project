@@ -85,15 +85,22 @@ quaternion_flyby_darkside = [ cosd(flyby_darkside/2) hbody*sind(flyby_darkside/2
 vV_inf_post_lightside = quatrotate(quaternion_flyby_lightside,vV_inf_prior);
 vV_inf_post_darkside = quatrotate(quaternion_flyby_darkside,vV_inf_prior);
 
-%{
-Still need to: 
-1) compare which outgoing velocity is closer to the target
-    velocity, and select that as the lightside/darkside. (Define Side
-    output)
-2) Use the vV_inf_post_light/dark to as chosen in 1) to find the
-    heliocentric velocity after the flyby.
+% Unit velocity vectors to find light vs dark-side swingby
+Vlightside = vV_inf_post_lightside/norm(vV_inf_post_lightside);
+Vdarkside = vV_inf_post_darkside/norm(vV_inf_post_darkside);
+Vtarget = vV_inf_post_goal/norm(vV_inf_post_goal);
 
-%}
+% Pick whichever has the smaller deviation in direction:
+if norm(Vlightside-Vtarget)<norm(Vdarkside-Vtarget)
+    Side = 1;
+    vV_inf_post_actual = Vlightside*v_inf_mag;
+else
+    Side = -1;
+    vV_inf_post_actual = Vlightside*v_inf_mag;
+end
+
+% Heliocentric velocity after the flyby:
+vOutHelio = vV_inf_post_actual + vV_planet;
 
     function angle_rad = AngleBetween(v1, v2)
         angle_rad = acos(dot(v1 / norm(v1), v2 / norm(v2)));
