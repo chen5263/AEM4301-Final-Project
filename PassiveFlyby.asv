@@ -65,7 +65,6 @@ delta = delta_target;
 if rp<minPeriapsis % Check that it's legal
     rp =  minPeriapsis;
     delta = delta_max;
-    warning('Below minimum Periapsis')
 end
 r_periapsis = rp;
 

@@ -34,7 +34,7 @@ E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1});
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
 G2E_dur = slop * [-1, 1] + days(Dates{5}-Dates{4}); 
-E2J_dur = slop * [-1, 1] + days(Dates{6}-Dates{5}); 
+E2J_dur = [-1, 5] + days(Dates{6}-Dates{5}); 
 MaxDur = days(Dates{6}-Dates{1}); % 2241 days
 
 %% Read Gaspra Table:
@@ -152,6 +152,7 @@ for E2Jd = E2Jrange     % Level 5
                 GaspraFlyby.dV + ...
                 EarthFlyby2.dV;
     if dVnet < bestDV
+%         disp([E2Vd, V2Ed, E2Gd, G2Ed, E2Jd])
         bestDV = dVnet;
         disp(bestDV)
         BestSequence.EarthEgress = EarthEgress;
@@ -159,6 +160,7 @@ for E2Jd = E2Jrange     % Level 5
         BestSequence.EarthFlyby1 = EarthFlyby1;
         BestSequence.GaspraFlyby = GaspraFlyby;
         BestSequence.EarthFlyby2 = EarthFlyby2;
+        BestSequence.JupiterArrival = JupiterArrival;
     end
 
 
@@ -176,12 +178,20 @@ end % Level 2
 end % Level 1
 toc
 
-bestDV
-BestSequence
+fprintf('Best DV =%.2f\n',bestDV)
+ReportSequence(BestSequence)
 
 
 
 %% Functions:
+function ReportSequence(Sequence)
+    fprintf('Earth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
+    fprintf('Venus Flyby:     dV= %.4f km/s\n', Sequence.VenusFlyby.dV)
+    fprintf('Earth Flyby (1): dV= %.4f km/s\n', Sequence.EarthFlyby1.dV)
+    fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
+    fprintf('Earth Flyby (2): dV= %.4f km/s\n', Sequence.EarthFlyby2.dV)
+    fprintf('Jupiter Capture: dV= NaN\n')
+end
 
 function dV = EarthDeparture2(days2Venus)
     % Function that finds the magnitude of the delta-V needed to change
@@ -193,13 +203,13 @@ function dV = EarthDeparture2(days2Venus)
     [~,r1,V_Earth_heliocentric,~] = EZ_States("Earth",day1);
     [~,r2,~,~] = EZ_States("Venus",day2);
     [V_heliocentric,~] = lambertCurtis(mu_Sun, r1,r2,seconds(day2-day1),'pro');
-    V1_inf = norm(V_heliocentric-V_Earth_heliocentric); % Hyperbolic excess velocity
+    v1_inf = norm(V_heliocentric-V_Earth_heliocentric); % Hyperbolic excess velocity
     rp = 6578; % km
     mu = 398600; % Earth
-    Vparking = sqrt(mu/rp);
-    Vrp = sqrt(2*( V1_inf^2/2 + mu/rp ));
+    vparking = sqrt(mu/rp);
+    vrp = sqrt(2*( v1_inf^2/2 + mu/rp ));
     
-    dV = Vrp-Vparking;
+    dV = vrp-vparking;
 end
 
 function rGaspra = GetLocGASPRA(date, GaspraTable)
@@ -210,7 +220,8 @@ function rGaspra = GetLocGASPRA(date, GaspraTable)
     rGaspra = GaspraTable(index, 2:end);
 end
 
-function [dV] = SwitchConics(r1, date1, r2,date2, r3, date3, PlanetID, minPeriapsis)
+function [dV] = SwitchConics(r1, date1, r2,date2, r3, date3, ...
+                                PlanetID, minPeriapsis)
 % INPUTS:
 %   r1, r2, r3            = heliocentric inertial position vectors
 %   date1, date2, date3   = datetime objects for the three positions.
@@ -221,15 +232,15 @@ function [dV] = SwitchConics(r1, date1, r2,date2, r3, date3, PlanetID, minPeriap
 
 mu_Sun = 1.327124400180000e+11;
 
-[V1out, V2in] = lambertCurtis(mu_Sun, r1,r2, seconds(date2-date1), 'pro');
-[V2out, V3in] = lambertCurtis(mu_Sun, r2,r3, seconds(date3-date2), 'pro');
+[~, V2in] = lambertCurtis(mu_Sun, r1,r2, seconds(date2-date1), 'pro');
+[V2out, ~] = lambertCurtis(mu_Sun, r2,r3, seconds(date3-date2), 'pro');
 
 if nargin == 6
     dV = norm(V2out-V2in);
     return
 end
 
-[vOutHelio, delta, r_periapsis, Side] = PassiveFlyby...
+[vOutHelio, ~, ~, ~] = PassiveFlyby...
     (PlanetID, date2, V2in, V2out, minPeriapsis);
 dV = norm(vOutHelio-V2out);
 
