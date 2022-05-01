@@ -28,8 +28,11 @@ Dates{5} = MakeDate(1992,12,8);  % 406d
 % Jupiter Arrival:
 Dates{6} = MakeDate(1995,12,7);  % 1094d
 
+% After Running once with the above values:
+
+
 %% Set up Timeline ranges:
-slop = 2; % +/- days
+slop = 4; % +/- days
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
@@ -61,7 +64,7 @@ E2Jmin = E2J_dur(1); E2Jmax = E2J_dur(2);
 
 %% Search over allowable range of dates:
 tic
-bestDV = 1e9; % km/s <- stupidly large number for initial comparison
+bestDV = 38.8; % km/s <- stupidly large number for initial comparison
 
 % Position and Velocity of Earth on day 0
 [~, r0Earth, v0Earth,~] = EZ_States("Earth",Dates{1});
@@ -181,6 +184,9 @@ toc
 fprintf('Best DV =%.2f\n',bestDV)
 ReportSequence(BestSequence)
 
+%%
+
+rGaspra = GetLocGASPRA(Dates{4}, GaspraTable)
 
 
 %% Functions:
