@@ -34,12 +34,13 @@ function vectorDiagrams(Dates, StartingNumber)
         quiver3(0,0,0,V2in(1),V2in(2),V2in(3))
         quiver3(0,0,0,V2out(1),V2out(2),V2out(3))
         quiver3(V2in(1),V2in(2),V2in(3),deltaV(1),deltaV(2),deltaV(3))
-        quiver3(0,0,0,0,0,0)
-        quiver3(0,0,0,0,0,0)
-        quiver3(0,0,0,0,0,0)
-        quiver3(0,0,0,0,0,0)
-        quiver3(0,0,0,0,0,0)
-        quiver3(0,0,0,0,0,0)
+        % To show what the legend looks like...
+        quiver3(0,0,0,0,0,0) % DELETE ME
+        quiver3(0,0,0,0,0,0) % DELETE ME
+        quiver3(0,0,0,0,0,0) % DELETE ME
+        quiver3(0,0,0,0,0,0) % DELETE ME
+        quiver3(0,0,0,0,0,0) % DELETE ME
+        quiver3(0,0,0,0,0,0) % DELETE ME
         hold off
     else
         vecfig = figure(StartingNumber+1);
