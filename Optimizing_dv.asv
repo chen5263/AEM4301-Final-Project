@@ -28,12 +28,6 @@ Dates{5} = MakeDate(1992,12,8);  % 406d
 Dates{6} = MakeDate(1995,12,7);  % 1094d
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Dates{2} = MakeDate(1990, 2, 12);
-% Dates{3} = MakeDate(1990, 12, 8);
-% Dates{4} = MakeDate(1991, 10, 27);
-% Dates{5} = MakeDate(1992, 12, 4);
-% Dates{6} = MakeDate(1995, 12, 7);
-
 tic
 maxdV = 41; % km/s
 [pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
@@ -41,12 +35,45 @@ ReportSequence(sequence1)
 dV1
 toc
 
-tic
-[pass2, dV2, betterDates2, sequence2] = Optimize_dV(betterDates1, maxdV);
-ReportSequence(sequence1)
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 12);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 27);
+Dates{5} = MakeDate(1992, 12, 4);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence2)
 dV2
-toc
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 14);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 25);
+Dates{5} = MakeDate(1992, 11, 30);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence3)
+dV3
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 16);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 23);
+Dates{5} = MakeDate(1992, 11, 26);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass4, dV4, betterDates4, sequence4] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence4)
+dV4
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 16);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 25);
+Dates{5} = MakeDate(1992, 11, 30);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence3)
+dV3
 
 function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV)
 Constants;
