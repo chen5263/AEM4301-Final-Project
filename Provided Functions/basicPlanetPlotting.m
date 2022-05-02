@@ -1,6 +1,3 @@
-close all;
-clear all;
-
 % gravitational parameters (kmˆ3/sˆ2)
 Mu_Sun = 132712000000;
 Mu_Earth = 398600;
@@ -14,9 +11,9 @@ r_Jupiter =778.6*10^6; % km
 R_Earth = 6378; % km
 R_Jupiter = 71490; % km
 
-%GaspraTable =  readtable('horizons_results_GASPRA_position_data.txt');
-%ShoemakerTable = readtable('horizons_results_SHOEMAKER_position_data.txt');
-%IdaTable = readtable('horizons_results_IDA_position_data.txt');
+GaspraTable =  readtable('horizons_results_GASPRA_position_data.txt');
+ShoemakerTable = readtable('horizons_results_SHOEMAKER_position_data.txt');
+IdaTable = readtable('horizons_results_IDA_position_data.txt');
 
 %all objects positions and velocities
 rObject = zeros(6,3);
@@ -51,7 +48,7 @@ totalNumDays = days(finalDatetime-initialDatetime);
 totalDays = initialDatetime + days(0:(totalNumDays-1));
 
 
-figure(1);
+fig = figure();
 plot3(0,0,0,'yo'); text(0,0,0,'Sun');
 hold on;
 % Loop through planets to get their positions and velocities at the desired time
@@ -78,7 +75,7 @@ for di = 1:size(datesPlanets,1)
     
     plot3(rs(:,1),rs(:,2),rs(:,3),'-','Color',planetColor(di));
 end
-    plot3(rObject(oi,1),rObject(oi,2),rObject(oi,3),'o','Color',objectColor(oi));
+%    plot3(rObject(oi,1),rObject(oi,2),rObject(oi,3),'o','Color',objectColor(oi));
 
 % loop through all objects
 for oi = 1:size(datesObjects,1)

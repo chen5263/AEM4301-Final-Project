@@ -1,3 +1,5 @@
+function finalDates = optimizeDates(initialDates, slop, iterations)
+% 
 % Testbed for Logan's code/Ideas that will probably break stuff:
 
 % Celestial Body Locations at specified dates:
@@ -11,7 +13,8 @@
 % Written 5/1 - Logan
 
 clear all; close all; clc;
-
+Constants;
+mu_Sun = Sun.mu;
 
 %% Time history of Actual Mission
 % Leave Earth                    Time since last event:
@@ -27,42 +30,37 @@ Dates{5} = MakeDate(1992,12,8);  % 406d
 % Jupiter Arrival:
 Dates{6} = MakeDate(1995,12,7);  % 1094d
 
+<<<<<<< HEAD
+% After Running once with the above values:
+
+
+%% Set up Timeline ranges:
+slop = 4; % +/- days
+=======
+% Best Results after Running once with the above values: (39.18 km/s)
+% Venus Flyby:      12-Feb-1990
+% Earth flyby1:     08-Dec-1990
+% Gaspra Flyby:     27-Oct-1991
+% Earth flyby2:     04-Dec-1992
+% Jupiter Arrival:  07-Dec-1995
+
+% Dates{2} = MakeDate(1990,2,22);
+% Dates{3} = MakeDate(1990,12,8);
+% Dates{4} = MakeDate(1991,10,18);
+% Dates{5} = MakeDate(1992,11,16);
+% Dates{6} = MakeDate(1995,12,7);
 
 tic
 maxdV = 41; % km/s
-[pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence1)
-dV1
-toc
-[pass2, dV2, betterDates2, sequence2] = Optimize_dV(betterDates1, 50);
-dV2
-report
-toc
-
-% counter = 0;
-% while toc()<60
-%     counter = counter + 1;
-%     [pass, dV, betterDates, sequence] = Optimize_dV(Dates, maxdV);
-%     disp(counter)
-%     toc
-%     if pass
-%         Dates = betterDates;
-%         maxdV = dV;
-%         ReportSequence(sequence)
-%         disp(maxdV)
-%     else
-%         break
-%     end
-% end
-toc
+while toc()<30
+    
+end
 
 
-function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV)
-Constants;
-mu_Sun = Sun.mu;
-
+function [dV, betterDates] = Optimize_dV(Dates, maxdV)
 % Set up Timeline ranges:
 slop = 2; % +/- days
+>>>>>>> acfee9b5c86b00fa23f1d3b18bea33c9f72ea6e1
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
@@ -82,8 +80,14 @@ E2Gmin = E2G_dur(1); E2Gmax = E2G_dur(2);
 G2Emin = G2E_dur(1); G2Emax = G2E_dur(2);
 E2Jmin = E2J_dur(1); E2Jmax = E2J_dur(2); 
 
+<<<<<<< HEAD
+%% Search over allowable range of dates:
+tic
+bestDV = 38.8; % km/s <- stupidly large number for initial comparison
+=======
 % Search over allowable range of dates:
 bestDV = maxdV; % km/s <- stupidly large number for initial comparison
+>>>>>>> acfee9b5c86b00fa23f1d3b18bea33c9f72ea6e1
 
 % Position and Velocity of Earth on day 0
 [~, r0Earth, v0Earth,~] = EZ_States("Earth",Dates{1});
@@ -180,7 +184,7 @@ for E2Jd = E2Jrange     % Level 5
     if dVnet < bestDV
 %         disp([E2Vd, V2Ed, E2Gd, G2Ed, E2Jd])
         bestDV = dVnet;
-%         disp(bestDV)
+        disp(bestDV)
         BestSequence.EarthEgress = EarthEgress;
         BestSequence.VenusFlyby = VenusFlyby;
         BestSequence.EarthFlyby1 = EarthFlyby1;
@@ -203,23 +207,19 @@ end % Level 2
     end
 end % Level 1
 
-try
-    betterDates{1} = BestSequence.EarthEgress.Date;
-    betterDates{2} = BestSequence.VenusFlyby.Date;
-    betterDates{3} = BestSequence.EarthFlyby1.Date;
-    betterDates{4} = BestSequence.GaspraFlyby.Date;
-    betterDates{5} = BestSequence.EarthFlyby1.Date;
-    betterDates{6} = BestSequence.JupiterArrival.Date;
+betterDates{1} = BestSequence.EarthEgress.Date;
+betterDates{2} = BestSequence.VenusFlyby.Date;
+betterDates{3} = BestSequence.EarthFlyby1.Date;
+betterDates{4} = BestSequence.GaspraFlyby.Date;
+betterDates{5} = BestSequence.EarthFlyby1.Date;
+betterDates{6} = BestSequence.JupiterArrival.Date;
 
-    dV = dVnet;
-    pass = 1;
-catch
-    pass = 0;
-    dV = -1;
-    betterDates = Dates;
-    BestSequence = 0;
-end
+<<<<<<< HEAD
+%%
 
+rGaspra = GetLocGASPRA(Dates{4}, GaspraTable)
+=======
+dV = dVnet;
 end
 
 
@@ -229,6 +229,7 @@ end
 %%
 
 % rGaspra = GetLocGASPRA(Dates{4}, GaspraTable)
+>>>>>>> acfee9b5c86b00fa23f1d3b18bea33c9f72ea6e1
 
 
 %% Functions:
@@ -238,7 +239,7 @@ function ReportSequence(Sequence)
     fprintf('Earth Flyby (1): dV= %.4f km/s\n', Sequence.EarthFlyby1.dV)
     fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
     fprintf('Earth Flyby (2): dV= %.4f km/s\n', Sequence.EarthFlyby2.dV)
-    fprintf('Jupiter Capture: dV= %.4f km/s\n\n', Sequence.JupiterArrival.dV)
+    fprintf('Jupiter Capture: dV= %.4f km/s\n', Sequence.JupiterArrival.dV)
     disp("Venus Flyby")
     disp(Sequence.VenusFlyby.Date)
     disp('Earth flyby1')
@@ -303,6 +304,13 @@ end
 dV = norm(vOutHelio-V2out);
 
 end
+<<<<<<< HEAD
+fprintf('Earth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
+    fprintf('Venus Flyby:     dV= %.4f km/s\n', Sequence.VenusFlyby.dV)
+    fprintf('Earth Flyby (1): dV= %.4f km/s\n', Sequence.EarthFlyby1.dV)
+    fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
+    fprintf('Earth Flyby (2): dV= %.4f km/s\n', Sequence.EarthFlyby2.dV)
+=======
 
 function [dV, rp_hyp] = JupiterCapture(vJupiter, vSpacecraft)
 % Both vJupiter and vSpacecraft are both HELIOCENTRIC INERTIAL velocities.
@@ -336,5 +344,6 @@ else
 end
 
 end
+>>>>>>> acfee9b5c86b00fa23f1d3b18bea33c9f72ea6e1
 
 

@@ -1,19 +1,17 @@
-% Celestial Body Locations at specified dates:
-%
 % Orbital Mechanics Final Project
 % Logan Anderson
 % Zixin Chen
 % Jamie Lyman
 %
-% File History: 
-% Written 4/23 - Logan
+% Project Report 2
 
 clear all; close all; clc;
-fig = figure();
+basicPlanetPlotting;
+clearvars -except fig
 Constants;
 mu_Sun = Sun.mu;
 
-% Project Report 1 - Part 4:
+%% Celestial Body Locations at specified dates:
 
 % Date          Body    J2000 x (km)    J2000 y (km)
 % Oct 18, 1989  Earth   
@@ -38,15 +36,16 @@ Dates{5} = MakeDate(1992,12,8);
 Dates{6} = MakeDate(1995,12,7);
 
 PlanetOrder = {'Earth','Venus','Earth','Gaspra','Earth','Jupiter'};
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Table 1:
+
+
+%% Table 1: Date, Body, Location of each Impulse (in J200)
 disp('Table 1:')
 disp([pad('Date ',12,'right'), '| ', ...
     pad('Body',8,'right'), '| ', ...
     pad('J2000 x (km)',13,'right'),'| ', ...
     pad('J2000 y (km)',13,'right')])
 for Lv1 = 1:6
-    [J2kx,J2ky] = GetPos(PlanetOrder{Lv1}, Dates{Lv1});
+    [J2kx,J2ky,J2kz] = GetPos(PlanetOrder{Lv1}, Dates{Lv1});
     if Lv1 ==4
         J2kx = 7.483782491348745E+07;
         J2ky = -3.208504326714966E+08;
@@ -55,10 +54,11 @@ for Lv1 = 1:6
         pad(PlanetOrder{Lv1},8,'right'), '| ', ...
         pad(sprintf('%.0f',J2kx),12,'left'), ' |', ...
         pad(sprintf('%.0f',J2ky),13,'left')])
+    plot3(J2kx,J2ky,J2kz,'kx')
 end
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Table 2:
+
+%% Table 2: Date, Body, Velocity Incoming and Outgoing (in J200)
 
 % Define Planet Orbital Elements (COE), Locations (r) and Velocity Vectors 
 % (v) at specified times:
@@ -101,9 +101,8 @@ for Lv1 = 1:5
     t1 = datevec(Dates{Lv1});
     t2 = datevec(Dates{Lv1+1});
     deltaT = etime(t2,t1);
-    [V1,V2] = lambert(r1,r2,deltaT, 'pro', mu_Sun);
+    [V1,V2] = lambertCurtis(mu_Sun,r1,r2,deltaT, 'pro');
     coe_transfer{Lv1} = coe_from_sv(r1,V1, mu_Sun);
-    
     flatline = pad('',80,'-');
     disp(flatline)
     row1 = [pad(datestr(Dates{Lv1}), 12,'right'), '- | ',...
@@ -118,11 +117,15 @@ for Lv1 = 1:5
         pad(sprintf('%.4f',V2(2)),9,'left')
         ];
     disp(row2)
-    plotConic(r1,r2,deltaT,Sun.mu,Lv1,fig)
+    plotConic(r1,r2,deltaT,Sun.mu,Lv1,fig) % Plots the conics on top of basicPlanetPlotting
+    if Lv1 == 5
+
+    end
+
 end
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Table 3:
+
+%% Table 3:
 
 disp(' ')
 disp('Table 3:')
@@ -159,30 +162,23 @@ for Lv1 = 1:5
     disp(row2)
 end
 
-% coe_transfer{Lv1} = [h e RA incl w TA a];
 
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots:
-% Venus, Earth, and Jupiter, and the Sun in the Heliocentric Frame
-hold on;  % axis equal; grid on;
-plot3(0,0,0,'*','Color','y') % Sun
-plotOrbit3D('Venus', fig, Dates{2});
-plotOrbit3D('Earth', fig, Dates{1});
-plotOrbit3D('Jupiter', fig, Dates{6});
-legend('Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer',...
-    'Venus Orbit','','Sun','Earth Orbit','','Jupiter Partial Orbit','','Location','southeast')
+%% Formatting Plots
+hold on;   axis equal; grid on;
+legend('Sun','Earth','Venus','','','Jupiter','Flyby Location \ Departure \ Arrival','','','','','','Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer')
 title("Mission Design Plot: Progress Report 2")
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functions:
-function [J2000x, J2000y] = GetPos(Planet,DateTime)
+
+%% Functions:
+function [J2000x, J2000y, J2000z] = GetPos(Planet,DateTime)
 try
     [~,r,~, ~] = EZ_States(Planet,DateTime);
     J2000x = r(1);
     J2000y = r(2);
+    J2000z = r(3);
 catch
     J2000x = 0;
     J2000y = 0;
+    J2000z = 0;
 end
 end

@@ -1,3 +1,5 @@
+function finalDates = optimizeDates(initialDates, slop, iterations)
+% 
 % Testbed for Logan's code/Ideas that will probably break stuff:
 
 % Celestial Body Locations at specified dates:
@@ -295,6 +297,18 @@ dV = norm(vOutHelio-V2out);
 
 end
 
+<<<<<<< HEAD
+ Date = intermediateDate;
+
+% out of loop
+
+finalDate{1} = BestSequence.EarthEgress.Date;
+finalDate{2} = BestSequence.VenusFlyby.Date;
+finalDate{3} = BestSequence.EarthFlyby1.Date;
+finalDate{4} = BestSequence.GaspraFlyby.Date;
+finalDate{5} = BestSequence.EarthFlyby2.Date;
+finalDate{6} = BestSequence.JupiterArrival.Date;
+=======
 function [dV, rp_hyp] = JupiterCapture(vJupiter, vSpacecraft)
 % Both vJupiter and vSpacecraft are both HELIOCENTRIC INERTIAL velocities.
 %
@@ -329,3 +343,4 @@ end
 end
 
 
+>>>>>>> acfee9b5c86b00fa23f1d3b18bea33c9f72ea6e1

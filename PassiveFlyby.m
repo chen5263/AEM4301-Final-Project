@@ -65,7 +65,6 @@ delta = delta_target;
 if rp<minPeriapsis % Check that it's legal
     rp =  minPeriapsis;
     delta = delta_max;
-    warning('Below minimum Periapsis')
 end
 r_periapsis = rp;
 
@@ -87,17 +86,17 @@ vV_inf_post_lightside = quatrotate(quaternion_flyby_lightside,vV_inf_prior);
 vV_inf_post_darkside = quatrotate(quaternion_flyby_darkside,vV_inf_prior);
 
 % Unit velocity vectors to find light vs dark-side swingby
-Vlightside = vV_inf_post_lightside; %/norm(vV_inf_post_lightside);
-Vdarkside = vV_inf_post_darkside; %/norm(vV_inf_post_darkside);
-Vtarget = vV_inf_post_goal; %/norm(vV_inf_post_goal);
+Vlightside = vV_inf_post_lightside/norm(vV_inf_post_lightside);
+Vdarkside = vV_inf_post_darkside/norm(vV_inf_post_darkside);
+Vtarget = vV_inf_post_goal/norm(vV_inf_post_goal);
 
 % Pick whichever has the smaller deviation in direction:
 if norm(Vlightside-Vtarget)<norm(Vdarkside-Vtarget)
     Side = 1;
-    vV_inf_post_actual = Vlightside;%*v_inf_mag;
+    vV_inf_post_actual = Vlightside*v_inf_mag;
 else
     Side = -1;
-    vV_inf_post_actual = Vdarkside;%*v_inf_mag;
+    vV_inf_post_actual = Vlightside*v_inf_mag;
 end
 
 % Heliocentric velocity after the flyby:
