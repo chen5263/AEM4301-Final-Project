@@ -28,13 +28,56 @@ Dates{5} = MakeDate(1992,12,8);  % 406d
 % Jupiter Arrival:
 Dates{6} = MakeDate(1995,12,7);  % 1094d
 
+% Best Results after Running once with the above values: (39.18 km/s)
+% Venus Flyby:      12-Feb-1990
+% Earth flyby1:     08-Dec-1990
+% Gaspra Flyby:     27-Oct-1991
+% Earth flyby2:     04-Dec-1992
+% Jupiter Arrival:  07-Dec-1995
+
+% Iteration2: (38.40 km/s)
+% Venus Flyby:      14-Feb-1990
+% Earth flyby1:     08-Dec-1990
+% Gaspra Flyby:     25-Oct-1991
+% Earth flyby2:     30-Nov-1992
+% Jupiter Arrival:  07-Dec-1995
+
+% Iteration3: (37.68 km/s)
+% Venus Flyby:      16-Feb-1990
+% Earth flyby1:     08-Dec-1990
+% Gaspra Flyby:     23-Oct-1991
+% Earth flyby2:     26-Nov-1992
+% Jupiter Arrival:  07-Dec-1995
+
+% Iteration3: (37.02 km/s)
+% Venus Flyby:      18-Feb-1990
+% Earth flyby1:     08-Dec-1990
+% Gaspra Flyby:     21-Oct-1991
+% Earth flyby2:     22-Nov-1992
+% Jupiter Arrival:  07-Dec-1995
+
+% Iteration4: (36.41 km/s)
+% Venus Flyby:      20-Feb-1990
+% Earth flyby1:     08-Dec-1990
+% Gaspra Flyby:     19-Oct-1991
+% Earth flyby2:     18-Nov-1992
+% Jupiter Arrival:  07-Dec-1995
+
+Dates{2} = MakeDate(1990,2,22);
+Dates{3} = MakeDate(1990,12,8);
+Dates{4} = MakeDate(1991,10,18);
+Dates{5} = MakeDate(1992,11,16);
+Dates{6} = MakeDate(1995,12,7);
+
+
+
 %% Set up Timeline ranges:
 slop = 2; % +/- days
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
 G2E_dur = slop * [-1, 1] + days(Dates{5}-Dates{4}); 
-E2J_dur = [-1, 5] + days(Dates{6}-Dates{5}); 
+E2J_dur = slop * [-1, 1] + days(Dates{6}-Dates{5}); 
 MaxDur = days(Dates{6}-Dates{1}); % 2241 days
 
 %% Read Gaspra Table:
@@ -61,7 +104,7 @@ E2Jmin = E2J_dur(1); E2Jmax = E2J_dur(2);
 
 %% Search over allowable range of dates:
 tic
-bestDV = 1e9; % km/s <- stupidly large number for initial comparison
+bestDV = 36.45; % km/s <- stupidly large number for initial comparison
 
 % Position and Velocity of Earth on day 0
 [~, r0Earth, v0Earth,~] = EZ_States("Earth",Dates{1});
@@ -118,7 +161,7 @@ for E2Gd = E2Grange     % Level 3
             % best option
 
 for G2Ed = G2Erange     % Level 4
-    E2Jrange = E2Jmin:min([MaxDur-(E2Vd+V2Ed+E2Gd+G2Ed), E2Jmax]);
+    E2Jrange = E2Jmin:(MaxDur-(E2Vd+V2Ed+E2Gd+G2Ed));
     if ~isempty(E2Jrange)
         % Earth Flyby2 date:
         EarthFlyby2.Date = GaspraFlyby.Date + days(G2Ed);
@@ -160,6 +203,7 @@ for E2Jd = E2Jrange     % Level 5
         BestSequence.EarthFlyby1 = EarthFlyby1;
         BestSequence.GaspraFlyby = GaspraFlyby;
         BestSequence.EarthFlyby2 = EarthFlyby2;
+        BestSequence.JupiterArrival = JupiterArrival;
     end
 
 
@@ -182,6 +226,11 @@ ReportSequence(BestSequence)
 
 
 
+%%
+
+% rGaspra = GetLocGASPRA(Dates{4}, GaspraTable)
+
+
 %% Functions:
 function ReportSequence(Sequence)
     fprintf('Earth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
@@ -190,6 +239,16 @@ function ReportSequence(Sequence)
     fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
     fprintf('Earth Flyby (2): dV= %.4f km/s\n', Sequence.EarthFlyby2.dV)
     fprintf('Jupiter Capture: dV= NaN\n')
+    disp("Venus Flyby")
+    disp(BestSequence.VenusFlyby.Date)
+    disp('Earth flyby1')
+    disp(BestSequence.EarthFlyby1.Date)
+    disp('Gaspra Flyby')
+    disp(BestSequence.GaspraFlyby.Date)
+    disp('Earth flyby2')
+    disp(BestSequence.EarthFlyby2.Date)
+    disp("Jupiter Arrival")
+    disp(BestSequence.JupiterArrival.Date)
 end
 
 function dV = EarthDeparture2(days2Venus)
@@ -244,3 +303,25 @@ end
 dV = norm(vOutHelio-V2out);
 
 end
+
+function dV = JupiterCapture()
+% Orbit at Jupiter has rp = 1000 km (altitude?)
+% Period of 7 months:
+mu = 126686534;
+rp = 71490+1000; % km
+% Seconds in 7 months:
+T = 7*30*24*3600;
+% T*sqrt(mu)/(2*pi) = a^(3/2)
+a = (T*sqrt(mu)/(2*pi))^(2/3);
+ra = 2*a-rp;
+% Velocity at periapsis
+v_rp = sqrt(2*(mu/rp - mu/(2*a)));
+% Velocity at apoapsis
+v_ra = sqrt(2*(mu/ra - mu/(2*a)));
+
+
+
+
+end
+
+
