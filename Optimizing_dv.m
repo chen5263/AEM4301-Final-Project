@@ -1,5 +1,3 @@
-function finalDates = optimizeDates(initialDates, slop, iterations)
-% 
 % Testbed for Logan's code/Ideas that will probably break stuff:
 
 % Celestial Body Locations at specified dates:
@@ -29,13 +27,7 @@ Dates{5} = MakeDate(1992,12,8);  % 406d
 % Jupiter Arrival:
 Dates{6} = MakeDate(1995,12,7);  % 1094d
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Dates{2} = MakeDate(1990, 2, 12);
-% Dates{3} = MakeDate(1990, 12, 8);
-% Dates{4} = MakeDate(1991, 10, 27);
-% Dates{5} = MakeDate(1992, 12, 4);
-% Dates{6} = MakeDate(1995, 12, 7);
-
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 maxdV = 41; % km/s
 [pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
@@ -43,13 +35,59 @@ ReportSequence(sequence1)
 dV1
 toc
 
-tic
-[pass2, dV2, betterDates2, sequence2] = Optimize_dV(betterDates1, maxdV);
-ReportSequence(sequence1)
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 12);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 27);
+Dates{5} = MakeDate(1992, 12, 4);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence2)
 dV2
-toc
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 14);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 25);
+Dates{5} = MakeDate(1992, 11, 30);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence3)
+dV3
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 16);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 23);
+Dates{5} = MakeDate(1992, 11, 26);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass4, dV4, betterDates4, sequence4] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence4)
+dV4
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 18);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 21);
+Dates{5} = MakeDate(1992, 11, 22);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass5, dV5, betterDates5, sequence5] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence5)
+dV5
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990, 2, 20);
+Dates{3} = MakeDate(1990, 12, 8);
+Dates{4} = MakeDate(1991, 10, 19);
+Dates{5} = MakeDate(1992, 11, 18);
+Dates{6} = MakeDate(1995, 12, 7);
+[pass6, dV6, betterDates6, sequence6] = Optimize_dV(Dates, maxdV);
+ReportSequence(sequence6)
+dV6
 
 
+
+%% BIG FUNCTION
 function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV)
 Constants;
 mu_Sun = Sun.mu;
@@ -297,18 +335,6 @@ dV = norm(vOutHelio-V2out);
 
 end
 
-<<<<<<< HEAD
- Date = intermediateDate;
-
-% out of loop
-
-finalDate{1} = BestSequence.EarthEgress.Date;
-finalDate{2} = BestSequence.VenusFlyby.Date;
-finalDate{3} = BestSequence.EarthFlyby1.Date;
-finalDate{4} = BestSequence.GaspraFlyby.Date;
-finalDate{5} = BestSequence.EarthFlyby2.Date;
-finalDate{6} = BestSequence.JupiterArrival.Date;
-=======
 function [dV, rp_hyp] = JupiterCapture(vJupiter, vSpacecraft)
 % Both vJupiter and vSpacecraft are both HELIOCENTRIC INERTIAL velocities.
 %
@@ -343,4 +369,3 @@ end
 end
 
 
->>>>>>> acfee9b5c86b00fa23f1d3b18bea33c9f72ea6e1
