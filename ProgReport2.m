@@ -101,9 +101,8 @@ for Lv1 = 1:5
     t1 = datevec(Dates{Lv1});
     t2 = datevec(Dates{Lv1+1});
     deltaT = etime(t2,t1);
-    [V1,V2] = lambert(r1,r2,deltaT, 'pro', mu_Sun);
+    [V1,V2] = lambertCurtis(mu_Sun,r1,r2,deltaT, 'pro');
     coe_transfer{Lv1} = coe_from_sv(r1,V1, mu_Sun);
-    
     flatline = pad('',80,'-');
     disp(flatline)
     row1 = [pad(datestr(Dates{Lv1}), 12,'right'), '- | ',...
@@ -119,6 +118,10 @@ for Lv1 = 1:5
         ];
     disp(row2)
     plotConic(r1,r2,deltaT,Sun.mu,Lv1,fig) % Plots the conics on top of basicPlanetPlotting
+    if Lv1 == 5
+
+    end
+
 end
 
 
@@ -162,7 +165,6 @@ end
 
 %% Formatting Plots
 hold on;   axis equal; grid on;
-%plot3(0,0,0,'*','Color','y') % Sun
 legend('Sun','Earth','Venus','','','Jupiter','Flyby Location \ Departure \ Arrival','','','','','','Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer')
 title("Mission Design Plot: Progress Report 2")
 
