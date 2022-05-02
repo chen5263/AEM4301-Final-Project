@@ -11,8 +11,7 @@
 % Written 5/1 - Logan
 
 clear all; close all; clc;
-Constants;
-mu_Sun = Sun.mu;
+
 
 %% Time history of Actual Mission
 % Leave Earth                    Time since last event:
@@ -41,32 +40,38 @@ Dates{6} = MakeDate(1995,12,7);  % 1094d
 % Dates{5} = MakeDate(1992,11,16);
 % Dates{6} = MakeDate(1995,12,7);
 
+tic
+maxdV = 41; % km/s
+while toc()<30
+    [pass, dV, betterDates, sequence] = Optimize_dV(Dates, maxdV)
+    if pass
+        Dates = betterDates;
+        maxdV = dV+0.01;
+        ReportSequence(Sequence)
+    else
+        break
+    end
+end
 
 
-%% Set up Timeline ranges:
-slop = 0; % +/- days
+function [pass, dV, betterDates] = Optimize_dV(Dates, maxdV)
+Constants;
+mu_Sun = Sun.mu;
+
+% Set up Timeline ranges:
+slop = 2; % +/- days
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
 G2E_dur = slop * [-1, 1] + days(Dates{5}-Dates{4}); 
 E2J_dur = slop * [-1, 1] + days(Dates{6}-Dates{5}); 
-MaxDur = days(Dates{6}-Dates{1}); % 2241 days
+MaxDur = 2241; % days(Dates{6}-Dates{1}); % 2241 days
 
-%% Read Gaspra Table:
+% Read Gaspra Table:
 GaspraTable =  readmatrix('horizons_results_GASPRA_position_data.txt');
 % GaspraDates = datetime(1990, 12, 8) + days( (0:size(GaspraTable,1)-1)' );
 % rGaspra = GaspraTable(1:end,2:end);
 % Gaspra data starts on 1990-Dec-08 and goes to 1992-Dec-08
-
-%% Estimate how many evaluations this is:
-counter = (E2V_dur(2)-E2V_dur(1)+1); % 1-> 243, 2-> 3125, 3-> 16807
-counter = counter*(V2E_dur(2)-V2E_dur(1)+1);
-counter = counter*(E2G_dur(2)-E2G_dur(1)+1);
-counter = counter*(G2E_dur(2)-G2E_dur(1)+1);
-counter = counter*(E2J_dur(2)-E2J_dur(1)+1);
-if counter>1e5
-    warning("Large number of trajectories to be evaluated (>1e5)")
-end
 
 E2Vmin = E2V_dur(1); E2Vmax = E2V_dur(2);
 V2Emin = V2E_dur(1); V2Emax = V2E_dur(2);
@@ -74,9 +79,8 @@ E2Gmin = E2G_dur(1); E2Gmax = E2G_dur(2);
 G2Emin = G2E_dur(1); G2Emax = G2E_dur(2);
 E2Jmin = E2J_dur(1); E2Jmax = E2J_dur(2); 
 
-%% Search over allowable range of dates:
-tic
-bestDV = 1e4; % km/s <- stupidly large number for initial comparison
+% Search over allowable range of dates:
+bestDV = maxdV; % km/s <- stupidly large number for initial comparison
 
 % Position and Velocity of Earth on day 0
 [~, r0Earth, v0Earth,~] = EZ_States("Earth",Dates{1});
@@ -163,7 +167,7 @@ for E2Jd = E2Jrange     % Level 5
             rJupiter, JupiterArrival.Date, ...
             3, Earth.minPeriapsis);
     % dV to capture @ Jupiter in 7 month orbit:
-    [JupiterArrival.dV, rp_hyp] = JupiterCapture(vJupiter, V2)
+    [JupiterArrival.dV, ~] = JupiterCapture(vJupiter, V2);
     dVnet = EarthEgress.dV + ...
                 VenusFlyby.dV + ...
                 EarthFlyby1.dV + ...
@@ -173,7 +177,7 @@ for E2Jd = E2Jrange     % Level 5
     if dVnet < bestDV
 %         disp([E2Vd, V2Ed, E2Gd, G2Ed, E2Jd])
         bestDV = dVnet;
-        disp(bestDV)
+%         disp(bestDV)
         BestSequence.EarthEgress = EarthEgress;
         BestSequence.VenusFlyby = VenusFlyby;
         BestSequence.EarthFlyby1 = EarthFlyby1;
@@ -195,10 +199,24 @@ end % Level 3
 end % Level 2
     end
 end % Level 1
-toc
 
-fprintf('Best DV =%.2f\n',bestDV)
-ReportSequence(BestSequence)
+try
+    betterDates{1} = BestSequence.EarthEgress.Date;
+    betterDates{2} = BestSequence.VenusFlyby.Date;
+    betterDates{3} = BestSequence.EarthFlyby1.Date;
+    betterDates{4} = BestSequence.GaspraFlyby.Date;
+    betterDates{5} = BestSequence.EarthFlyby1.Date;
+    betterDates{6} = BestSequence.JupiterArrival.Date;
+
+    dV = dVnet;
+    pass = 1;
+catch
+    pass = 0;
+    dV = -1;
+    betterDates = Dates;
+end
+
+
 
 
 
