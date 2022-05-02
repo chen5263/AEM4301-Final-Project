@@ -11,9 +11,9 @@ r_Jupiter =778.6*10^6; % km
 R_Earth = 6378; % km
 R_Jupiter = 71490; % km
 
-%GaspraTable =  readtable('horizons_results_GASPRA_position_data.txt');
-%ShoemakerTable = readtable('horizons_results_SHOEMAKER_position_data.txt');
-%IdaTable = readtable('horizons_results_IDA_position_data.txt');
+GaspraTable =  readtable('horizons_results_GASPRA_position_data.txt');
+ShoemakerTable = readtable('horizons_results_SHOEMAKER_position_data.txt');
+IdaTable = readtable('horizons_results_IDA_position_data.txt');
 
 %all objects positions and velocities
 rObject = zeros(6,3);

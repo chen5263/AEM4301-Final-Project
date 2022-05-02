@@ -1,3 +1,5 @@
+function finalDates = optimizeDates(initialDates, slop, iterations)
+% 
 % Testbed for Logan's code/Ideas that will probably break stuff:
 
 % Celestial Body Locations at specified dates:
@@ -251,3 +253,14 @@ end
 dV = norm(vOutHelio-V2out);
 
 end
+
+ Date = intermediateDate;
+
+% out of loop
+
+finalDate{1} = BestSequence.EarthEgress.Date;
+finalDate{2} = BestSequence.VenusFlyby.Date;
+finalDate{3} = BestSequence.EarthFlyby1.Date;
+finalDate{4} = BestSequence.GaspraFlyby.Date;
+finalDate{5} = BestSequence.EarthFlyby2.Date;
+finalDate{6} = BestSequence.JupiterArrival.Date;
