@@ -184,6 +184,7 @@ for E2Jd = E2Jrange     % Level 5
     JupiterArrival.Date = EarthFlyby2.Date + days(E2Jd);
     % Jupiter Arival Location
     [~, rJupiter, vJupiter,~] = EZ_States("Jupiter", JupiterArrival.Date);
+    [~,V2] = lambertCurtis(mu_Sun, rEarth2, rJupiter, seconds(JupiterArrival.Date - EarthFlyby2.Date),'pro');
     % dV at Earth Flyby 2:
     EarthFlyby2.dV = SwitchConics(rGaspra, GaspraFlyby.Date,...
             rEarth2, EarthFlyby2.Date, ...
@@ -304,7 +305,10 @@ dV = norm(vOutHelio-V2out);
 
 end
 
-function dV = JupiterCapture()
+function dV = JupiterCapture(vJupiter, vSpacecraft)
+% Both vJupiter and vSpacecraft are both HELIOCENTRIC INERTIAL velocities.
+%
+
 % Orbit at Jupiter has rp = 1000 km (altitude?)
 % Period of 7 months:
 mu = 126686534;
@@ -319,6 +323,9 @@ v_rp = sqrt(2*(mu/rp - mu/(2*a)));
 % Velocity at apoapsis
 v_ra = sqrt(2*(mu/ra - mu/(2*a)));
 
+% Vinf
+vinf = norm(vJupiter-vSpacecraft);
+v_rp_hyp = 
 
 
 

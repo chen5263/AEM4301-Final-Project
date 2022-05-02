@@ -35,44 +35,16 @@ Dates{6} = MakeDate(1995,12,7);  % 1094d
 % Earth flyby2:     04-Dec-1992
 % Jupiter Arrival:  07-Dec-1995
 
-% Iteration2: (38.40 km/s)
-% Venus Flyby:      14-Feb-1990
-% Earth flyby1:     08-Dec-1990
-% Gaspra Flyby:     25-Oct-1991
-% Earth flyby2:     30-Nov-1992
-% Jupiter Arrival:  07-Dec-1995
-
-% Iteration3: (37.68 km/s)
-% Venus Flyby:      16-Feb-1990
-% Earth flyby1:     08-Dec-1990
-% Gaspra Flyby:     23-Oct-1991
-% Earth flyby2:     26-Nov-1992
-% Jupiter Arrival:  07-Dec-1995
-
-% Iteration3: (37.02 km/s)
-% Venus Flyby:      18-Feb-1990
-% Earth flyby1:     08-Dec-1990
-% Gaspra Flyby:     21-Oct-1991
-% Earth flyby2:     22-Nov-1992
-% Jupiter Arrival:  07-Dec-1995
-
-% Iteration4: (36.41 km/s)
-% Venus Flyby:      20-Feb-1990
-% Earth flyby1:     08-Dec-1990
-% Gaspra Flyby:     19-Oct-1991
-% Earth flyby2:     18-Nov-1992
-% Jupiter Arrival:  07-Dec-1995
-
-Dates{2} = MakeDate(1990,2,22);
-Dates{3} = MakeDate(1990,12,8);
-Dates{4} = MakeDate(1991,10,18);
-Dates{5} = MakeDate(1992,11,16);
-Dates{6} = MakeDate(1995,12,7);
+% Dates{2} = MakeDate(1990,2,22);
+% Dates{3} = MakeDate(1990,12,8);
+% Dates{4} = MakeDate(1991,10,18);
+% Dates{5} = MakeDate(1992,11,16);
+% Dates{6} = MakeDate(1995,12,7);
 
 
 
 %% Set up Timeline ranges:
-slop = 2; % +/- days
+slop = 0; % +/- days
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
@@ -104,7 +76,7 @@ E2Jmin = E2J_dur(1); E2Jmax = E2J_dur(2);
 
 %% Search over allowable range of dates:
 tic
-bestDV = 36.45; % km/s <- stupidly large number for initial comparison
+bestDV = 1e4; % km/s <- stupidly large number for initial comparison
 
 % Position and Velocity of Earth on day 0
 [~, r0Earth, v0Earth,~] = EZ_States("Earth",Dates{1});
@@ -190,11 +162,14 @@ for E2Jd = E2Jrange     % Level 5
             rEarth2, EarthFlyby2.Date, ...
             rJupiter, JupiterArrival.Date, ...
             3, Earth.minPeriapsis);
+    % dV to capture @ Jupiter in 7 month orbit:
+    [JupiterArrival.dV, rp_hyp] = JupiterCapture(vJupiter, V2)
     dVnet = EarthEgress.dV + ...
                 VenusFlyby.dV + ...
                 EarthFlyby1.dV + ...
                 GaspraFlyby.dV + ...
-                EarthFlyby2.dV;
+                EarthFlyby2.dV + ...
+                JupiterArrival.dV;
     if dVnet < bestDV
 %         disp([E2Vd, V2Ed, E2Gd, G2Ed, E2Jd])
         bestDV = dVnet;
@@ -239,17 +214,17 @@ function ReportSequence(Sequence)
     fprintf('Earth Flyby (1): dV= %.4f km/s\n', Sequence.EarthFlyby1.dV)
     fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
     fprintf('Earth Flyby (2): dV= %.4f km/s\n', Sequence.EarthFlyby2.dV)
-    fprintf('Jupiter Capture: dV= NaN\n')
+    fprintf('Jupiter Capture: dV= %.4f km/s\n', Sequence.JupiterArrival.dV)
     disp("Venus Flyby")
-    disp(BestSequence.VenusFlyby.Date)
+    disp(Sequence.VenusFlyby.Date)
     disp('Earth flyby1')
-    disp(BestSequence.EarthFlyby1.Date)
+    disp(Sequence.EarthFlyby1.Date)
     disp('Gaspra Flyby')
-    disp(BestSequence.GaspraFlyby.Date)
+    disp(Sequence.GaspraFlyby.Date)
     disp('Earth flyby2')
-    disp(BestSequence.EarthFlyby2.Date)
+    disp(Sequence.EarthFlyby2.Date)
     disp("Jupiter Arrival")
-    disp(BestSequence.JupiterArrival.Date)
+    disp(Sequence.JupiterArrival.Date)
 end
 
 function dV = EarthDeparture2(days2Venus)
@@ -305,7 +280,7 @@ dV = norm(vOutHelio-V2out);
 
 end
 
-function dV = JupiterCapture(vJupiter, vSpacecraft)
+function [dV, rp_hyp] = JupiterCapture(vJupiter, vSpacecraft)
 % Both vJupiter and vSpacecraft are both HELIOCENTRIC INERTIAL velocities.
 %
 
@@ -323,8 +298,18 @@ v_rp = sqrt(2*(mu/rp - mu/(2*a)));
 % Velocity at apoapsis
 v_ra = sqrt(2*(mu/ra - mu/(2*a)));
 
+% Vinf
+vinf = norm(vJupiter-vSpacecraft);
+v_rp_hyp = sqrt(2*(vinf^2./2 + mu/rp));
+v_ra_hyp = sqrt(2*(vinf^2./2 + mu/ra));
 
-
+if abs(v_rp_hyp-v_rp) < abs(v_ra_hyp-v_ra)
+    dV = abs(v_rp_hyp-v_rp);
+    rp_hyp = rp;
+else
+    dV = abs(v_ra_hyp-v_ra);
+    rp_hyp = ra;
+end
 
 end
 
