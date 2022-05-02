@@ -2,9 +2,9 @@ function plotConic(R1, R2, t, mu, number, fig)
     if ~exist('number','var')
         number = 0;
     end
-    conicColor = {'#FFFFFF','#A2142F','#D95319','#EDB120','#77AC30','#0072BD'};
+    conicColor = {'#FFFFFF','#A2142F','#EDB120','#77AC30','#4DBEEE','#7E2F8E'};
 
-    [V1, V2] = lambert(R1, R2, t, 'pro', mu);
+    [V1, V2] = lambertCurtis(mu, R1, R2, t, 'pro');
     coe1 = coe_from_sv(R1,V1,mu);
     h = coe1(1);
     e = coe1(2);
@@ -15,10 +15,13 @@ function plotConic(R1, R2, t, mu, number, fig)
     coe2 = coe_from_sv(R2,V2,mu);
     TA2 = coe2(6);
     p = (h^2/mu); 
+    while TA1 > TA2
+        TA2 = TA2 + 2*pi;
+    end
     thetas = linspace(TA1,TA2,1e3);
     rs = zeros(size(thetas));
     for Lv1=1:1:length(thetas)
-    rs(Lv1) = p/(1+(e*cos(thetas(Lv1))));
+        rs(Lv1) = p/(1+(e*cos(thetas(Lv1))));
     end
     DCM = [cos(w), -sin(w), 0;
            sin(w),  cos(w), 0;
