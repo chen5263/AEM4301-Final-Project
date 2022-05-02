@@ -29,63 +29,35 @@ Dates{6} = MakeDate(1995,12,7);  % 1094d
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
-maxdV = 41; % km/s
+maxdV = 22.5; % km/s
 [pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
 ReportSequence(sequence1)
 dV1
 toc
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Dates{2} = MakeDate(1990, 2, 12);
-Dates{3} = MakeDate(1990, 12, 8);
-Dates{4} = MakeDate(1991, 10, 27);
-Dates{5} = MakeDate(1992, 12, 4);
-Dates{6} = MakeDate(1995, 12, 7);
-[pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence2)
-dV2
+% % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tic
+% Dates{2} = MakeDate(1990, 2, 7);  % Venus
+% Dates{3} = MakeDate(1990, 12, 2); % Earth 1
+% Dates{4} = MakeDate(1991, 10, 20);% Gaspra
+% Dates{5} = MakeDate(1992, 11, 26); % Earth 2
+% Dates{6} = MakeDate(1995, 12, 7); % Jupiter
+% [pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV);
+% ReportSequence(sequence2)
+% dV2
+% toc
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Dates{2} = MakeDate(1990, 2, 14);
-Dates{3} = MakeDate(1990, 12, 8);
-Dates{4} = MakeDate(1991, 10, 25);
-Dates{5} = MakeDate(1992, 11, 30);
-Dates{6} = MakeDate(1995, 12, 7);
-[pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence3)
-dV3
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Dates{2} = MakeDate(1990, 2, 16);
-Dates{3} = MakeDate(1990, 12, 8);
-Dates{4} = MakeDate(1991, 10, 23);
-Dates{5} = MakeDate(1992, 11, 26);
-Dates{6} = MakeDate(1995, 12, 7);
-[pass4, dV4, betterDates4, sequence4] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence4)
-dV4
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Dates{2} = MakeDate(1990, 2, 18);
-Dates{3} = MakeDate(1990, 12, 8);
-Dates{4} = MakeDate(1991, 10, 21);
-Dates{5} = MakeDate(1992, 11, 22);
-Dates{6} = MakeDate(1995, 12, 7);
-[pass5, dV5, betterDates5, sequence5] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence5)
-dV5
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Dates{2} = MakeDate(1990, 2, 20);
-Dates{3} = MakeDate(1990, 12, 8);
-Dates{4} = MakeDate(1991, 10, 19);
-Dates{5} = MakeDate(1992, 11, 18);
-Dates{6} = MakeDate(1995, 12, 7);
-[pass6, dV6, betterDates6, sequence6] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence6)
-dV6
-
-
+% %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tic
+% Dates{2} = MakeDate(1990, 2, 9);  % Venus
+% Dates{3} = MakeDate(1990, 12, 1); % Earth 1
+% Dates{4} = MakeDate(1991, 10, 16);% Gaspra
+% Dates{5} = MakeDate(1992, 11, 19); % Earth 2
+% Dates{6} = MakeDate(1995, 12, 7); % Jupiter
+% [pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, dV2+0.1);
+% ReportSequence(sequence3)
+% dV2
+% toc
 
 %% BIG FUNCTION
 function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV)
@@ -93,7 +65,9 @@ Constants;
 mu_Sun = Sun.mu;
 
 % Set up Timeline ranges:
-slop = 2; % +/- days
+%%%%%%%%%%%%
+slop = 0; % +/- days
+%%%%%%%%%%%%
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
@@ -253,15 +227,6 @@ end
 
 end
 
-
-
-
-
-%%
-
-% rGaspra = GetLocGASPRA(Dates{4}, GaspraTable)
-
-
 %% Functions:
 function ReportSequence(Sequence)
     fprintf('Earth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
@@ -286,14 +251,16 @@ function dV = EarthDeparture2(days2Venus)
     % Function that finds the magnitude of the delta-V needed to change
     % from Earth parking orbit @200 km to hyperbolic orbit to be on
     % transfer to Venus:
-    day1 = datetime(1990,12,8);
+    day1 = datetime(1989,10,18);
     day2 = day1 + days(days2Venus);
     mu_Sun = 1.327124400180000e+11;
     [~,r1,V_Earth_heliocentric,~] = EZ_States("Earth",day1);
     [~,r2,~,~] = EZ_States("Venus",day2);
-    [V_heliocentric,~] = lambertCurtis(mu_Sun, r1,r2,seconds(day2-day1),'pro');
+    [V_heliocentric,~] = lambertCurtis(mu_Sun, r1,r2, seconds(day2-day1),'pro');
+    
     v1_inf = norm(V_heliocentric-V_Earth_heliocentric); % Hyperbolic excess velocity
-    rp = 6578; % km
+    
+    rp = 6578; % km (r_Earth + 200 km)
     mu = 398600; % Earth
     vparking = sqrt(mu/rp);
     vrp = sqrt(2*( v1_inf^2/2 + mu/rp ));
@@ -329,9 +296,14 @@ if nargin == 6
     return
 end
 
-[vOutHelio, ~, ~, ~] = PassiveFlyby...
+[vOutHelio,  delta, r_periapsis, Side] = PassiveFlyby...
     (PlanetID, date2, V2in, V2out, minPeriapsis);
 dV = norm(vOutHelio-V2out);
+
+disp(vOutHelio)
+disp(delta)
+disp(r_periapsis)
+disp(Side)
 
 end
 

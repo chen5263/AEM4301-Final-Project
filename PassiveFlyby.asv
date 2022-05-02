@@ -47,7 +47,7 @@ end
 % Incoming velocity vector: 
 vV_prior = Vincoming;
 
-vV_inf_prior = vV_prior - vV_planet; % Planet frame V_infinity^- Vector
+vV_inf_prior = vV_prior - vV_planet;  % Planet frame V_infinity^- Vector
 v_inf_prior = norm(vV_inf_prior);      %                           Scalar
 
 % Outgoing TARGET velocity vector:
@@ -68,7 +68,7 @@ if rp<minPeriapsis % Check that it's legal
 end
 r_periapsis = rp;
 
-% Quaternion code from Dr. Strandjord
+% Quaternion code 
 hbody = cross(vV_planet/norm(vV_planet), rV_planet/norm(rV_planet)); 
 hbody = hbody/norm(hbody); % Angular momentum of the planet
 
@@ -85,21 +85,31 @@ quaternion_flyby_darkside = [ cosd(flyby_darkside/2) hbody*sind(flyby_darkside/2
 vV_inf_post_lightside = quatrotate(quaternion_flyby_lightside,vV_inf_prior);
 vV_inf_post_darkside = quatrotate(quaternion_flyby_darkside,vV_inf_prior);
 
-% Unit velocity vectors:
-Vlightside = vV_inf
+% Unit velocity vectors to find light vs dark-side swingby
+Vlightside = vV_inf_post_lightside/norm(vV_inf_post_lightside);
+Vdarkside = vV_inf_post_darkside/norm(vV_inf_post_darkside);
+Vtarget = vV_inf_post_goal/norm(vV_inf_post_goal);
 
-%{
-Still need to: 
-1) compare which outgoing velocity is closer to the target
-    velocity, and select that as the lightside/darkside. (Define Side
-    output)
-2) Use the vV_inf_post_light/dark to as chosen in 1) to find the
-    heliocentric velocity after the flyby.
+% Pick whichever has the smaller deviation in direction:
+if norm(Vlightside-Vtarget)<norm(Vdarkside-Vtarget)
+    Side = 1; % Lightside
+    vV_inf_post_actual = Vlightside*v_inf_mag;
+else
+    Side = -1; % Darkside
+    vV_inf_post_actual = Vdarkside*v_inf_mag;
+end
 
-%}
+% Heliocentric velocity after the flyby:
+vOutHelio = vV_inf_post_actual + vV_planet;
 
     function angle_rad = AngleBetween(v1, v2)
         angle_rad = acos(dot(v1 / norm(v1), v2 / norm(v2)));
     end
-
+figure()
+hold on;
+axis equal;
+quiver3(0,0,0, Vincoming(1),Vincoming(2),Vincoming(3), 0, 'm')
+quiver3(0,0,0, vV_planet(1),vV_planet(2),vV_planet(3), 0, 'k')
+quiver3(0,0,0, wanted_Voutgoing(1),wanted_Voutgoing(2),wanted_Voutgoing(3), 0, 'g')
+quiver3(vV_planet(1),vV_planet(2),vV_planet(3), vV_inf_prior(1), vV_inf_prior(2), vV_inf_prior(3), 0, 'Color', [0.8 .64 .
 end

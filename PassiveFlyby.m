@@ -47,7 +47,7 @@ end
 % Incoming velocity vector: 
 vV_prior = Vincoming;
 
-vV_inf_prior = vV_prior - vV_planet; % Planet frame V_infinity^- Vector
+vV_inf_prior = vV_prior - vV_planet;  % Planet frame V_infinity^- Vector
 v_inf_prior = norm(vV_inf_prior);      %                           Scalar
 
 % Outgoing TARGET velocity vector:
@@ -68,19 +68,19 @@ if rp<minPeriapsis % Check that it's legal
 end
 r_periapsis = rp;
 
-% Quaternion code from Dr. Strandjord
+% Quaternion code 
 hbody = cross(vV_planet/norm(vV_planet), rV_planet/norm(rV_planet)); 
 hbody = hbody/norm(hbody); % Angular momentum of the planet
 
 v_inf_mag = v_inf_prior; % norm(v_inf_p); % Velocity magnitude @ infinity relative to planet
 
 % flyby_rad_minRP = 2*asin(1/ (minRP_Vec(di)*v_inf_mag^2/Mu_Venus + 1));
-flyby_lightside = delta;
-flyby_darkside = -delta;
+flyby_lightside = -delta;
+flyby_darkside = delta;
 % flyby_deg_minRP = GravityAssistBooleanVec(di)*flyby_rad_minRP*180/pi;
 % Quaternions:
-quaternion_flyby_lightside = [ cos(flyby_lightside/2) hbody*sind(flyby_lightside/2)];
-quaternion_flyby_darkside = [ cosd(flyby_darkside/2) hbody*sind(flyby_darkside/2)];
+quaternion_flyby_lightside = [ cos(flyby_lightside/2) hbody*sin(flyby_lightside/2)];
+quaternion_flyby_darkside = [ cos(flyby_darkside/2) hbody*sin(flyby_darkside/2)];
 
 vV_inf_post_lightside = quatrotate(quaternion_flyby_lightside,vV_inf_prior);
 vV_inf_post_darkside = quatrotate(quaternion_flyby_darkside,vV_inf_prior);
@@ -92,11 +92,11 @@ Vtarget = vV_inf_post_goal/norm(vV_inf_post_goal);
 
 % Pick whichever has the smaller deviation in direction:
 if norm(Vlightside-Vtarget)<norm(Vdarkside-Vtarget)
-    Side = 1;
+    Side = 1; % Lightside
     vV_inf_post_actual = Vlightside*v_inf_mag;
 else
-    Side = -1;
-    vV_inf_post_actual = Vlightside*v_inf_mag;
+    Side = -1; % Darkside
+    vV_inf_post_actual = Vdarkside*v_inf_mag;
 end
 
 % Heliocentric velocity after the flyby:
@@ -105,5 +105,12 @@ vOutHelio = vV_inf_post_actual + vV_planet;
     function angle_rad = AngleBetween(v1, v2)
         angle_rad = acos(dot(v1 / norm(v1), v2 / norm(v2)));
     end
-
+figure()
+hold on;
+axis equal;
+quiver3(0,0,0, Vincoming(1),Vincoming(2),Vincoming(3), 0, 'm')
+quiver3(0,0,0, vV_planet(1),vV_planet(2),vV_planet(3), 0, 'k')
+quiver3(0,0,0, wanted_Voutgoing(1),wanted_Voutgoing(2),wanted_Voutgoing(3), 0, 'g')
+quiver3(vV_planet(1),vV_planet(2),vV_planet(3), vV_inf_prior(1), vV_inf_prior(2), vV_inf_prior(3), 0, 'Color', [0.8 .64 .56])
+quiver3(vV_planet(1),vV_planet(2),vV_planet(3), vV_inf_post_actual(1), vV_inf_post_actual(2), vV_inf_post_actual(3),0,'Color',[.65 .65 .65])
 end
