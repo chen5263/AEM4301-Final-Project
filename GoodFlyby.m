@@ -1,4 +1,4 @@
-function [dV_scalar, dV_vector, side, fig] = GoodFlyby(Vprior,Vpost,Vplanet,Rplanet, min_rp, mu)
+function [dV_scalar, dV_vector, side, fig] = GoodFlyby(Vprior,Vpost,Vplanet,~ , min_rp, mu)
 % Function that finds the optimal flyby with the following constraints:
 %   1) instantaneous impulsive maneuver instantly before or instantly after flyby
 %   2) flyby is instantaneous (i.e. also an instantaneous impulsive maneuver)
