@@ -1,5 +1,5 @@
 function [vOutHelio, delta, r_periapsis, Side] = PassiveFlyby...
-    (PlanetID, Date, Vincoming, wanted_Voutgoing, minPeriapsis)
+    (PlanetID, Date, Vincoming, wanted_Voutgoing, minPeriapsis, plot_it)
 %{
 Function that calculates the optimal flyby trajectory of a planet given
 a minimum periapsis and a desired outgoing velocity vector.
@@ -10,6 +10,8 @@ INPUTS:
     Vincoming           [1 3] (km/s) Heliocentric inertial frame velocity vector
     wanted_Voutgoing    [1 3] (km/s) Heliocentric inertial frame velocity vector
     minPeriapsis        [scalar] (km) minimum allowable periapsis
+    plot_it             true/false should stuff be plotted (Optional,
+                        defaults to false)
 OUTPUTS:
     vOutHelio           [1 3] (km/s) Heliocentric inertial frame velocity vector
     delta               (radians) angle change from incoming to outgoing 
@@ -27,6 +29,7 @@ end
 if minPeriapsis < 100
     minPeriapsis = 100;
 end
+if nargin < 6; plot_it = false; end
 
 % Define gravitational parameter:
 mu.Sun = 132712440018; % km^3/s^2
@@ -105,12 +108,17 @@ vOutHelio = vV_inf_post_actual + vV_planet;
     function angle_rad = AngleBetween(v1, v2)
         angle_rad = acos(dot(v1 / norm(v1), v2 / norm(v2)));
     end
-figure()
-hold on;
-axis equal;
-quiver3(0,0,0, Vincoming(1),Vincoming(2),Vincoming(3), 0, 'm')
-quiver3(0,0,0, vV_planet(1),vV_planet(2),vV_planet(3), 0, 'k')
-quiver3(0,0,0, wanted_Voutgoing(1),wanted_Voutgoing(2),wanted_Voutgoing(3), 0, 'g')
-quiver3(vV_planet(1),vV_planet(2),vV_planet(3), vV_inf_prior(1), vV_inf_prior(2), vV_inf_prior(3), 0, 'Color', [0.8 .64 .56])
-quiver3(vV_planet(1),vV_planet(2),vV_planet(3), vV_inf_post_actual(1), vV_inf_post_actual(2), vV_inf_post_actual(3),0,'Color',[.65 .65 .65])
+if plot_it
+    figure()
+    hold on;
+    axis equal;
+    quiver3(0,0,0, Vincoming(1),Vincoming(2),Vincoming(3), 0, 'm')
+    quiver3(0,0,0, vV_planet(1),vV_planet(2),vV_planet(3), 0, 'k')
+    quiver3(0,0,0, wanted_Voutgoing(1),wanted_Voutgoing(2),wanted_Voutgoing(3), 0, 'g')
+    quiver3(vV_planet(1),vV_planet(2),vV_planet(3), ...
+        vV_inf_prior(1), vV_inf_prior(2), vV_inf_prior(3), 0, 'Color', [0.8 .64 .56])
+    quiver3(vV_planet(1),vV_planet(2),vV_planet(3), ...
+        vV_inf_post_actual(1), vV_inf_post_actual(2), vV_inf_post_actual(3),0,'Color',[.65 .65 .65])
+end
+
 end

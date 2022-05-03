@@ -28,31 +28,58 @@ Dates{5} = MakeDate(1992,12,8);  % 406d
 Dates{6} = MakeDate(1995,12,7);  % 1094d
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tic
+% maxdV = 10; % km/s
+% [pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
+% ReportSequence(sequence1)
+% dV1 % 10.8430 km/s
+% toc
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dates{2} = MakeDate(1990,2,9);
+% Dates{3} = MakeDate(1990,12,5);
+% Dates{4} = MakeDate(1991,10,24);
+% Dates{5} = MakeDate(1992,12,1);
+% tic
+% maxdV = 10.8431; % km/s
+% [pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV)
+% ReportSequence(sequence2)
+% dV2 % 9.7285
+% toc
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dates{2} = MakeDate(1990,2,11);
+% Dates{3} = MakeDate(1990,12,5);
+% Dates{4} = MakeDate(1991,10,22);
+% Dates{5} = MakeDate(1992,11,27);
+% tic
+% maxdV = 9.7286; % km/s
+% [pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, maxdV);
+% ReportSequence(sequence3)
+% dV3 % 9.6423
+% toc
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Dates{2} = MakeDate(1990,2,13);
+Dates{3} = MakeDate(1990,12,5);
+Dates{4} = MakeDate(1991,10,22);
+Dates{5} = MakeDate(1992,11,27);
 tic
-maxdV = 41; % km/s
-[pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
-ReportSequence(sequence1)
-dV1
+maxdV = 9.6424; % km/s
+[pass4, dV4, betterDates4, sequence4] = Optimize_dV(Dates, maxdV, 4);
+ReportSequence(sequence4)
+dV4 % 9.6407
 toc
 
-% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Dates{2} = MakeDate(1990, 2, 12);
-% Dates{3} = MakeDate(1990, 12, 8);
-% Dates{4} = MakeDate(1991, 10, 27);
-% Dates{5} = MakeDate(1992, 12, 4);
-% Dates{6} = MakeDate(1995, 12, 7);
-% [pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV);
-% ReportSequence(sequence2)
-% dV2
-% 
-
 %% BIG FUNCTION
-function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV)
+function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV, slop)
 Constants;
 mu_Sun = Sun.mu;
 
 % Set up Timeline ranges:
-slop = 3; % +/- days
+%%%%%%%%%%%%
+% slop = 5; % +/- days
+%%%%%%%%%%%%
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
 E2G_dur = slop * [-1, 1] + days(Dates{4}-Dates{3}); 
@@ -214,7 +241,7 @@ end
 
 %% Functions:
 function ReportSequence(Sequence)
-    fprintf('Earth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
+    fprintf('\nEarth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
     fprintf('Venus Flyby:     dV= %.4f km/s\n', Sequence.VenusFlyby.dV)
     fprintf('Earth Flyby (1): dV= %.4f km/s\n', Sequence.EarthFlyby1.dV)
     fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
@@ -281,7 +308,7 @@ if nargin == 6
     return
 end
 
-[vOutHelio, ~, ~, ~] = PassiveFlyby...
+[vOutHelio,  delta, r_periapsis, Side] = PassiveFlyby...
     (PlanetID, date2, V2in, V2out, minPeriapsis);
 dV = norm(vOutHelio-V2out);
 

@@ -29,44 +29,60 @@ Dates{6} = MakeDate(1995,12,7);  % 1094d
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
-maxdV = 22.5; % km/s
-[pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV);
+maxdV = 10; % km/s
+[pass1, dV1, betterDates1, sequence1] = Optimize_dV(Dates, maxdV,0);
 ReportSequence(sequence1)
-dV1
+% dV1 % 10.8430 km/s
 toc
 
-% % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure(1); title('Venus - Optimize_dV');
+figure(2); title('Earth2 - Optimize_dV');
+figure(3); title('Earth3 - Optimize_dV');
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dates{2} = MakeDate(1990,2,9);
+% Dates{3} = MakeDate(1990,12,5);
+% Dates{4} = MakeDate(1991,10,24);
+% Dates{5} = MakeDate(1992,12,1);
 % tic
-% Dates{2} = MakeDate(1990, 2, 7);  % Venus
-% Dates{3} = MakeDate(1990, 12, 2); % Earth 1
-% Dates{4} = MakeDate(1991, 10, 20);% Gaspra
-% Dates{5} = MakeDate(1992, 11, 26); % Earth 2
-% Dates{6} = MakeDate(1995, 12, 7); % Jupiter
-% [pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV);
+% maxdV = 10.8431; % km/s
+% [pass2, dV2, betterDates2, sequence2] = Optimize_dV(Dates, maxdV)
 % ReportSequence(sequence2)
-% dV2
+% dV2 % 9.7285
 % toc
 
-% %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dates{2} = MakeDate(1990,2,11);
+% Dates{3} = MakeDate(1990,12,5);
+% Dates{4} = MakeDate(1991,10,22);
+% Dates{5} = MakeDate(1992,11,27);
 % tic
-% Dates{2} = MakeDate(1990, 2, 9);  % Venus
-% Dates{3} = MakeDate(1990, 12, 1); % Earth 1
-% Dates{4} = MakeDate(1991, 10, 16);% Gaspra
-% Dates{5} = MakeDate(1992, 11, 19); % Earth 2
-% Dates{6} = MakeDate(1995, 12, 7); % Jupiter
-% [pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, dV2+0.1);
+% maxdV = 9.7286; % km/s
+% [pass3, dV3, betterDates3, sequence3] = Optimize_dV(Dates, maxdV);
 % ReportSequence(sequence3)
-% dV2
+% dV3 % 9.6423
+% toc
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dates{2} = MakeDate(1990,2,13);
+% Dates{3} = MakeDate(1990,12,5);
+% Dates{4} = MakeDate(1991,10,22);
+% Dates{5} = MakeDate(1992,11,27);
+% tic
+% maxdV = 9.6424; % km/s
+% [pass4, dV4, betterDates4, sequence4] = Optimize_dV(Dates, maxdV, 4);
+% ReportSequence(sequence4)
+% dV4 % 9.6407
 % toc
 
 %% BIG FUNCTION
-function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV)
+function [pass, dV, betterDates, BestSequence] = Optimize_dV(Dates, maxdV, slop)
 Constants;
 mu_Sun = Sun.mu;
 
 % Set up Timeline ranges:
 %%%%%%%%%%%%
-slop = 0; % +/- days
+% slop = 5; % +/- days
 %%%%%%%%%%%%
 E2V_dur = slop * [-1, 1] + days(Dates{2}-Dates{1}); 
 V2E_dur = slop * [-1, 1] + days(Dates{3}-Dates{2});
@@ -229,22 +245,22 @@ end
 
 %% Functions:
 function ReportSequence(Sequence)
-    fprintf('Earth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
+    fprintf('\nEarth Departure: dV= %.4f km/s\n', Sequence.EarthEgress.dV)
     fprintf('Venus Flyby:     dV= %.4f km/s\n', Sequence.VenusFlyby.dV)
     fprintf('Earth Flyby (1): dV= %.4f km/s\n', Sequence.EarthFlyby1.dV)
     fprintf('Gaspra Flyby:    dV= %.4f km/s\n', Sequence.GaspraFlyby.dV)
     fprintf('Earth Flyby (2): dV= %.4f km/s\n', Sequence.EarthFlyby2.dV)
     fprintf('Jupiter Capture: dV= %.4f km/s\n\n', Sequence.JupiterArrival.dV)
-    disp("Venus Flyby")
-    disp(Sequence.VenusFlyby.Date)
-    disp('Earth flyby1')
-    disp(Sequence.EarthFlyby1.Date)
-    disp('Gaspra Flyby')
-    disp(Sequence.GaspraFlyby.Date)
-    disp('Earth flyby2')
-    disp(Sequence.EarthFlyby2.Date)
-    disp("Jupiter Arrival")
-    disp(Sequence.JupiterArrival.Date)
+%     disp("Venus Flyby")
+%     disp(Sequence.VenusFlyby.Date)
+%     disp('Earth flyby1')
+%     disp(Sequence.EarthFlyby1.Date)
+%     disp('Gaspra Flyby')
+%     disp(Sequence.GaspraFlyby.Date)
+%     disp('Earth flyby2')
+%     disp(Sequence.EarthFlyby2.Date)
+%     disp("Jupiter Arrival")
+%     disp(Sequence.JupiterArrival.Date)
 end
 
 function dV = EarthDeparture2(days2Venus)
@@ -297,13 +313,8 @@ if nargin == 6
 end
 
 [vOutHelio,  delta, r_periapsis, Side] = PassiveFlyby...
-    (PlanetID, date2, V2in, V2out, minPeriapsis);
+    (PlanetID, date2, V2in, V2out, minPeriapsis, 1);
 dV = norm(vOutHelio-V2out);
-
-disp(vOutHelio)
-disp(delta)
-disp(r_periapsis)
-disp(Side)
 
 end
 
