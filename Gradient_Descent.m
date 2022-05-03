@@ -22,7 +22,7 @@ bestdV = 5.05; %
 tic
 dVscore = [];
 
-for Lv1 = 1:4
+for Lv1 = 1:5
 %     d2, d3, d4, d5
     [bestdV, d2, d3, d4, d5] = GradDescent(bestdV, 2, d2, d3, d4, d5);
     dVscore(end+1) = bestdV;
