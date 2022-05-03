@@ -16,26 +16,15 @@ Vinf_prior = norm(vVinf_prior); % Scalar
 vVinf_post = Vpost-Vplanet;
 Vinf_post = norm(vVinf_post);
 
-% 2: Planet's Angular Velocity vector:
-hbody = cross(Rplanet/norm(Rplanet), Vplanet/norm(Vplanet)); 
-hbody = hbody/norm(hbody); % Angular momentum of the planet
-
 % Target Turning angle:
 delta_target = AngleBetween(vVinf_prior, vVinf_post);
+disp(rad2deg(delta_target))
+
+% 2: Rotation axis
+hbody = cross(vVinf_post, vVinf_prior); 
+hbody = hbody/norm(hbody);
 
 %% Section 1: dV after swingby:
-% [dV, dV_vec, side] = dVafter(vVinf_prior, vVinf_post, Vplanet, hbody, min_rp, mu);
-% 
-%     function [dV, dV_vec, side] = dVafter(vVinf_prior, goal_vVinf_post, Vplanet, hbody, min_rp, mu)
-%         delta_goal = AngleBetween(vVinf_prior, goal_vVinf_post);
-%         deltamax = 2*asin(1/(min_rp*vVinf_prior^2/mu + 1));
-%         if delta_goal <= deltamax
-%             Delta = delta_goal;
-%         else
-%             Delta = deltamax;
-%         end
-%         
-%     end
 
 % Maximum Turning Angle
 delta_max = 2*asin(1/(min_rp*Vinf_prior^2/mu + 1));
@@ -80,6 +69,8 @@ After.dV_vector = dV_vector;
 After.side = side;
 After.lightside = lightside;
 
+disp(rad2deg(delta_light))
+
 %% Section 2: dV before swingby:
 delta_max = 2*asin(1/(min_rp*Vinf_post^2/mu +1));
 % Choose turning angle and flyby periapsis 
@@ -123,7 +114,8 @@ Before.side = side;
 Before.lightside = lightside;
 
 %% Section 3: Pick best option
-if 0 % Before.dV_scalar < After.dV_scalar
+Use_dV_before = 0; % Before.dV_scalar < After.dV_scalar;
+if Use_dV_before 
     dV_scalar = Before.dV_scalar;
     dV_vector = Before.dV_vector;
     side = Before.side;
@@ -143,7 +135,11 @@ if nargout == 4
     fig.Vplanet = EZquiver3(zero, Vplanet, fig.fig);
     fig.Vprior =  EZquiver3(zero, Vprior,  fig.fig);
     fig.Vpost =   EZquiver3(zero, Vpost,   fig.fig);
-    fig.Vinf_prior = EZquiver3(Vplanet, vVinf_prior, fig.fig);
+    if Use_dV_before
+        fig.Vinf_prior = EZquiver3(Vprior+dV_vector, Vplanet-(Vprior+dV_vector), fig.fig);
+    else
+        fig.Vinf_prior = EZquiver3(Vprior, Vplanet-Vprior, fig.fig);
+    end
 
     if lightside
         fig.Vinf_post = EZquiver3(Vplanet, vinf_post_light, fig.fig);
