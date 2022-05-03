@@ -1,4 +1,4 @@
-clc
+clc; close all;
 D1 = MakeDate(1989,10,18); % Leave Earth
 D2 = MakeDate(1990,2,10);  % Venus Flyby
 D3 = MakeDate(1990,12,8);  % Earth Flyby1
@@ -32,7 +32,7 @@ mu_Venus = 324859;
 mu_Jupiter = 126686534;
 Earth.radius = 6378; % km
 Venus.radius = 6052;
-Jupiter.radius = 71490;
+% Jupiter.radius = 71490;
 Earth.minPeriapsis = Earth.radius + 300; % km
 Venus.minPeriapsis = Venus.radius + 16000;
 
@@ -52,7 +52,6 @@ rGaspra = GetLocGASPRA(D4, readmatrix('horizons_results_GASPRA_position_data.txt
 [E2Ja,E2Jb] = lambertCurtis(mu_Sun, r3Earth, rJupiter, seconds(D6-D5),'pro');
 
 if PlotFlag
-    % [dV_scalar, dV_vector, fig] = changeVel(Vprior,Vpost, FlagPlot)
     dV.Earth1 = EarthDeparture(E2Va,v1Earth);
     [dV.Venus,  dV.VenusVec,  dV.VenusSide,  figures{1}] = GoodFlyby(E2Vb,V2Ea,vVenus,rVenus,Venus.minPeriapsis, mu_Venus);
     title('Venus Flyby');
@@ -64,7 +63,6 @@ if PlotFlag
     title('Second Earth Flyby');
     [dV.Jupiter, dV.JupiterHyperbola_rp] = JupiterCapture(vJupiter,E2Jb);
 else
-% [dV_scalar, dV_vector, side, fig] = GoodFlyby(Vprior,Vpost,Vplanet,Rplanet, min_rp, mu)
     dV.Earth1 = EarthDeparture(E2Va,v1Earth);
     [dV.Venus, dV.VenusVec, dV.VenusSide] = GoodFlyby(E2Vb,V2Ea,vVenus,rVenus,Venus.minPeriapsis, mu_Venus);
     [dV.Earth2, dV.Earth2Vec, dV.Earth2Side] = GoodFlyby(V2Eb,E2Ga,v2Earth,r2Earth,Earth.minPeriapsis, mu_Earth);

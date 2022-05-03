@@ -24,6 +24,18 @@ hbody = hbody/norm(hbody); % Angular momentum of the planet
 delta_target = AngleBetween(vVinf_prior, vVinf_post);
 
 %% Section 1: dV after swingby:
+% [dV, dV_vec, side] = dVafter(vVinf_prior, vVinf_post, Vplanet, hbody, min_rp, mu);
+% 
+%     function [dV, dV_vec, side] = dVafter(vVinf_prior, goal_vVinf_post, Vplanet, hbody, min_rp, mu)
+%         delta_goal = AngleBetween(vVinf_prior, goal_vVinf_post);
+%         deltamax = 2*asin(1/(min_rp*vVinf_prior^2/mu + 1));
+%         if delta_goal <= deltamax
+%             Delta = delta_goal;
+%         else
+%             Delta = deltamax;
+%         end
+%         
+%     end
 
 % Maximum Turning Angle
 delta_max = 2*asin(1/(min_rp*Vinf_prior^2/mu + 1));
@@ -111,7 +123,7 @@ Before.side = side;
 Before.lightside = lightside;
 
 %% Section 3: Pick best option
-if Before.dV_scalar < After.dV_scalar
+if 0 % Before.dV_scalar < After.dV_scalar
     dV_scalar = Before.dV_scalar;
     dV_vector = Before.dV_vector;
     side = Before.side;
@@ -140,10 +152,11 @@ if nargout == 4
         fig.Vinf_post = EZquiver3(Vplanet, vinf_post_dark, fig.fig);
         fig.dV = EZquiver3(Vplanet+vinf_post_dark,dV_vector, fig.fig);
     end
+    legend("V_{planet}","V_{prior}","V_{post}","V_\infty^-","V_\infty^+","\Delta V")
 end
 
 %%
-function angle_rad = AngleBetween(v1, v2)
+    function angle_rad = AngleBetween(v1, v2)
         angle_rad = acos(dot(v1 / norm(v1), v2 / norm(v2)));
     end
 end
