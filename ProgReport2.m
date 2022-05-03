@@ -125,9 +125,9 @@ for Lv1 = 1:5
         IDATable =  readmatrix('horizons_results_IDA_position_data.txt');
         plotConic(r1,GetLocGASPRA(Dates{Lv1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig)
         plotConic(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig)
-        plot3(GaspraTable(:,2),GaspraTable(:,3),GaspraTable(:,4),Color='#404040',LineStyle='--') % Plot of all of Gasparas Data
-        plot3(SHOEMAKERTable(:,2),SHOEMAKERTable(:,3),SHOEMAKERTable(:,4),'k',LineStyle='--') % Plot of all of Gasparas Data
-        plot3(IDATable(:,2),IDATable(:,3),IDATable(:,4),Color='#808080',LineStyle='--') % Plot of all of Gasparas Data
+        plot3(GaspraTable(:,2),GaspraTable(:,3),GaspraTable(:,4),"Color",'#404040',"LineStyle",'--') % Plot of all of Gasparas Data
+        plot3(SHOEMAKERTable(:,2),SHOEMAKERTable(:,3),SHOEMAKERTable(:,4),'k',"LineStyle",'--') % Plot of all of Gasparas Data
+        plot3(IDATable(:,2),IDATable(:,3),IDATable(:,4),"Color",'#808080',"LineStyle",'--') % Plot of all of Gasparas Data
     end
 end
 

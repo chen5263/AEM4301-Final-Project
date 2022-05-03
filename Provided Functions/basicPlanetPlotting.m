@@ -73,7 +73,7 @@ for di = 1:size(datesPlanets,1)
                             (Mu_Sun, planetId(di), yearVal,monthVal,dayVal, hourVal, minuteVal, secondVal);
     end
     
-    plot3(rs(:,1),rs(:,2),rs(:,3),'-','Color',planetColor(di),LineStyle='--')
+    plot3(rs(:,1),rs(:,2),rs(:,3),'-','Color',planetColor(di),"LineStyle",'--')
 end
 %    plot3(rObject(oi,1),rObject(oi,2),rObject(oi,3),'o','Color',objectColor(oi));
 
