@@ -30,7 +30,7 @@ vObject(4,:) =GASPRA(4:6);
 % set up information about dates related to planets
 planetId = [ 3           2           3           3               5];
 planetInd = [1           2           3           5               6];
-planetColor = ['b' 'r' 'b' 'b' 'y'];
+planetColor = ['b' 'r' 'b' 'b' 'g'];
 datesPlanets = [ 1989 10 18;  1990 2  10;  1990 12  8;  1992 12  8; 1995 12  7];
 hour = 0; minute = 0; second = 0;
 
@@ -73,7 +73,7 @@ for di = 1:size(datesPlanets,1)
                             (Mu_Sun, planetId(di), yearVal,monthVal,dayVal, hourVal, minuteVal, secondVal);
     end
     
-    plot3(rs(:,1),rs(:,2),rs(:,3),'-','Color',planetColor(di));
+    plot3(rs(:,1),rs(:,2),rs(:,3),'-','Color',planetColor(di),LineStyle='--')
 end
 %    plot3(rObject(oi,1),rObject(oi,2),rObject(oi,3),'o','Color',objectColor(oi));
 

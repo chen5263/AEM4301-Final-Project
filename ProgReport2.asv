@@ -184,9 +184,7 @@ fprintf('Jupiter Capture: dV= %.4f\n', dV.Jupiter)
 %% Formatting Plots
 figure(fig);
 hold on;   axis equal; grid on;
-legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location \ Departure \ Arrival','','','','','',...
-    'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer'},...
-    'Location','bestoutside')
+legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location \ Departure \ Arrival','','','','','','Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer')
 title("Mission Design Plot: Progress Report 2")
 
 

@@ -29,6 +29,7 @@ if FlagPlot
     EZquiver3(zero, Vpost, fig);
     EZquiver3(Vprior, dV_vector,fig);
     axis equal;
+    legend("V_{sc / sun}^{ -}","V_{sc / sun}^{ +}","\Delta V")
 end
 
 end
