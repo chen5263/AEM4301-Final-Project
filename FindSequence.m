@@ -1,25 +1,25 @@
-clc; close all;
-D1 = MakeDate(1989,10,18); % Leave Earth
-D2 = MakeDate(1990,2,10);  % Venus Flyby
-D3 = MakeDate(1990,12,8);  % Earth Flyby1
-D4 = MakeDate(1991,10,29); % Visit Gaspra
-D5 = MakeDate(1992,12,8);  % Earth Flyby2
-D6 = MakeDate(1995,12,7);  % Jupiter Arrival:
-PlotFlag = 1;
+% clc; close all;
+% D1 = MakeDate(1989,10,18); % Leave Earth
+% D2 = MakeDate(1990,2,10);  % Venus Flyby
+% D3 = MakeDate(1990,12,8);  % Earth Flyby1
+% D4 = MakeDate(1991,10,29); % Visit Gaspra
+% D5 = MakeDate(1992,12,8);  % Earth Flyby2
+% D6 = MakeDate(1995,12,7);  % Jupiter Arrival:
+% PlotFlag = 1;
+% 
+% tic
+% [dV, figs] = FindSequences(D1, D2, D3, D4, D5, D6, PlotFlag);
+% toc
+% 
+% fprintf('Total dV: %.4f\n', dV.Net)
+% fprintf('Earth Departure: dV= %.4f\n', dV.Earth1)
+% fprintf('Venus Flyby:     dV= %.4f\n', dV.Venus)
+% fprintf('Earth2 flyby:    dV= %.4f\n', dV.Earth2)
+% fprintf('Gaspra Flyby:    dV= %.4f\n', dV.Gaspra)
+% fprintf('Earth3 flyby:    dV= %.4f\n', dV.Earth3)
+% fprintf('Jupiter Capture: dV= %.4f\n', dV.Jupiter)
 
-tic
-[dV, figs] = FindSequences(D1, D2, D3, D4, D5, D6, PlotFlag);
-toc
-
-fprintf('Total dV: %.4f\n', dV.Net)
-fprintf('Earth Departure: dV= %.4f\n', dV.Earth1)
-fprintf('Venus Flyby:     dV= %.4f\n', dV.Venus)
-fprintf('Earth2 flyby:    dV= %.4f\n', dV.Earth2)
-fprintf('Gaspra Flyby:    dV= %.4f\n', dV.Gaspra)
-fprintf('Earth3 flyby:    dV= %.4f\n', dV.Earth3)
-fprintf('Jupiter Capture: dV= %.4f\n', dV.Jupiter)
-
-function [dV, figures] = FindSequences(D1,D2,D3,D4,D5,D6, PlotFlag)
+function [dV, figures] = FindSequence(D1,D2,D3,D4,D5,D6, PlotFlag)
 figures = {};
 if nargin <7
     PlotFlag = false;

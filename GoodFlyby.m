@@ -18,7 +18,6 @@ Vinf_post = norm(vVinf_post);
 
 % Target Turning angle:
 delta_target = AngleBetween(vVinf_prior, vVinf_post);
-disp(rad2deg(delta_target))
 
 % 2: Rotation axis
 hbody = cross(vVinf_post, vVinf_prior); 
@@ -69,7 +68,7 @@ After.dV_vector = dV_vector;
 After.side = side;
 After.lightside = lightside;
 
-disp(rad2deg(delta_light))
+% disp(rad2deg(delta_light))
 
 %% Section 2: dV before swingby:
 delta_max = 2*asin(1/(min_rp*Vinf_post^2/mu +1));
@@ -114,7 +113,7 @@ Before.side = side;
 Before.lightside = lightside;
 
 %% Section 3: Pick best option
-Use_dV_before = 0; % Before.dV_scalar < After.dV_scalar;
+Use_dV_before = Before.dV_scalar < After.dV_scalar;
 if Use_dV_before 
     dV_scalar = Before.dV_scalar;
     dV_vector = Before.dV_vector;
