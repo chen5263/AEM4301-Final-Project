@@ -38,6 +38,12 @@ if strcmpi(Planet,"Venus"); Planet = 2;
 elseif strcmpi(Planet,"Earth"); Planet = 3;
 elseif strcmpi(Planet,"Mars"); Planet = 4;
 elseif strcmpi(Planet,"Jupiter"); Planet = 5;
+elseif strcmpi(Planet,"Gaspra")
+    coe = nan;
+    v = nan;
+    jd = nan;
+    r = GetLocGASPRA(DateTime, readmatrix('horizons_results_GASPRA_position_data.txt'));
+    return
 else; error("Unknown Planet");
 end
 
