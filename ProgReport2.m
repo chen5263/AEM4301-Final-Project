@@ -1,3 +1,5 @@
+% DEAD FILE
+% 
 % Orbital Mechanics Final Project
 % Logan Anderson
 % Zixin Chen
@@ -124,8 +126,8 @@ for Lv1 = 1:5
         GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
         SHOEMAKERTable = readmatrix('horizons_results_SHOEMAKER_position_data.txt');
         IDATable =  readmatrix('horizons_results_IDA_position_data.txt');
-        plotConic(r1,GetLocGASPRA(Dates{Lv1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig)
-        plotConic(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig)
+        [TA1{Lv1+10}, TA2{Lv1+10}, h{Lv1+10}, e{Lv1+10}, RA{Lv1+10}, w{Lv1+10}, DCM{Lv1+10}] = plotConicSaveVars(r1,GetLocGASPRA(Dates{Lv1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig);
+        [TA1{Lv1+10}, TA2{Lv1+20}, h{Lv1+20}, e{Lv1+20}, RA{Lv1+20}, w{Lv1+20}, DCM{Lv1+20}] = plotConicSaveVars(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig);
         plot3(GaspraTable(:,2),GaspraTable(:,3),GaspraTable(:,4),"Color",'#404040',"LineStyle",'--') % Plot of all of Gasparas Data
         plot3(SHOEMAKERTable(:,2),SHOEMAKERTable(:,3),SHOEMAKERTable(:,4),'k',"LineStyle",'--') % Plot of all of Gasparas Data
         plot3(IDATable(:,2),IDATable(:,3),IDATable(:,4),"Color",'#808080',"LineStyle",'--') % Plot of all of Gasparas Data
@@ -189,7 +191,6 @@ legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location \ Departure \ Arri
     'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer'},...
     'Location','bestoutside')
 title("Mission Design Plot: Progress Report 2")
-
 
 %% Functions:
 function [J2000x, J2000y, J2000z] = GetPos(Planet,DateTime)
