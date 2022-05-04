@@ -1,17 +1,17 @@
 clc; close all;
 D1 = MakeDate(1989,10,18); % Leave Earth
-% D2 = MakeDate(1990,2,10);  % Venus Flyby
-% D3 = MakeDate(1990,12,8);  % Earth Flyby1
-% D4 = MakeDate(1991,10,29); % Visit Gaspra
-% D5 = MakeDate(1992,12,8);  % Earth Flyby2
+D2 = MakeDate(1990,2,10);  % Venus Flyby
+D3 = MakeDate(1990,12,8);  % Earth Flyby1
+D4 = MakeDate(1991,10,29); % Visit Gaspra
+D5 = MakeDate(1992,12,8);  % Earth Flyby2
 D6 = MakeDate(1995,12,7);  % Jupiter Arrival:
 PlotFlag = 0;
 
 
-D2 = MakeDate(1990,2,2);  % Venus Flyby
-D3 = MakeDate(1990,12,5);  % Earth Flyby1
-D4 = MakeDate(1991,10,26); % Visit Gaspra
-D5 = MakeDate(1992,12,5);  % Earth Flyby2
+% D2 = MakeDate(1990,2,2);  % Venus Flyby
+% D3 = MakeDate(1990,12,5);  % Earth Flyby1
+% D4 = MakeDate(1991,10,26); % Visit Gaspra
+% D5 = MakeDate(1992,12,5);  % Earth Flyby2
 % dV = 4.6252 km/s;
 
 d2 = D2;
@@ -20,14 +20,18 @@ d4 = D4;
 d5 = D5;
 bestdV = 5.05; % 
 tic
-dVscore = [];
-
-for Lv1 = 1:1
-    [bestdV, d2, d3, d4, d5] = GradDescent(bestdV, 10, d2, d3, d4, d5);
+dVscore = [inf];
+[dVscore(end+1),~,~,~,~] = GradDescent(bestdV, 0, d2, d3, d4, d5);
+counter = 1;
+fprintf('Run %.0f  dV= %.4f km/s\n', counter, bestdV)
+while dVscore(end) ~= dVscore(end-1)
+    counter = counter+1;
+    [bestdV, d2, d3, d4, d5] = GradDescent(bestdV, 1, d2, d3, d4, d5);
     dVscore(end+1) = bestdV;
-    fprintf('Run %.0f  dV= %.4f km/s\n', Lv1, bestdV)
+    fprintf('Run %.0f  dV= %.4f km/s\n', counter, bestdV)
 end
 toc
+dVscore = dVscore(2:end);
 
 figure(); hold on;
 plot(dVscore,'xk:');
