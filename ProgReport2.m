@@ -118,13 +118,12 @@ for Lv1 = 1:5
         ];
     disp(row2)
     if Lv1 ~= 4
-        plotConic(r1,r2,deltaT,Sun.mu,Lv1,fig) % Plots the conics on top of basicPlanetPlotting
+        [TA1{Lv1}, TA2{Lv1}, h{Lv1}, e{Lv1}, RA{Lv1}, w{Lv1}, DCM{Lv1}] = plotConicSaveVars(r1,r2,deltaT,Sun.mu,Lv1,fig);
+                % Plots the conics on top of basicPlanetPlotting
     else
         GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
         SHOEMAKERTable = readmatrix('horizons_results_SHOEMAKER_position_data.txt');
         IDATable =  readmatrix('horizons_results_IDA_position_data.txt');
-        plotConic(r1,GetLocGASPRA(Dates{Lv1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig)
-        plotConic(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig)
         plot3(GaspraTable(:,2),GaspraTable(:,3),GaspraTable(:,4),"Color",'#404040',"LineStyle",'--') % Plot of all of Gasparas Data
         plot3(SHOEMAKERTable(:,2),SHOEMAKERTable(:,3),SHOEMAKERTable(:,4),'k',"LineStyle",'--') % Plot of all of Gasparas Data
         plot3(IDATable(:,2),IDATable(:,3),IDATable(:,4),"Color",'#808080',"LineStyle",'--') % Plot of all of Gasparas Data
