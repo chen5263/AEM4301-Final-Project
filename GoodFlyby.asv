@@ -138,12 +138,10 @@ if nargout == 4
         fig.Vinf_prior = EZquiver3(Vprior+dV_vector, Vplanet-(Vprior+dV_vector), fig.fig);
         % This If/Else needs to be updated to the dV_before
         if lightside
-            fig.Vinf_post = EZquiver3(Vplanet, Vpost-Vplanet, fig.fig);
+            fig.Vinf_post = EZquiver3(Vplanet, vVinf_prior, fig.fig);
             fig.dV = EZquiver3(Vprior, dV_vector, fig.fig);
         else
-            % THIS NEEDS TO BE FIXED
-            warning("This is currently a clone of the lightside plot, not sure if correct. 5/7/2022 - Logan")
-            fig.Vinf_post = EZquiver3(Vplanet, Vpost-Vplanet, fig.fig);
+            fig.Vinf_post = EZquiver3(Vplanet, vinf_prior_dark, fig.fig);
             fig.dV = EZquiver3(Vprior, dV_vector, fig.fig);
         end
     else
