@@ -23,6 +23,13 @@ mu_Sun = Sun.mu;
 % Dec 8, 1992   Earth   
 % Dec 7, 1995   Jupiter
 
+% Gaspra on 10/29:
+% $$SOE
+% 2448558.500000000 = A.D. 1991-Oct-29 00:00:00.0000 TDB 
+%  X = 7.483782491348745E+07 Y =-3.208504326714966E+08 Z = 1.166109205102742E+07
+%  VX= 1.842791612316331E+01 VY= 7.909174576743062E+00 VZ= 1.103827165877077E+00
+%  LT= 1.099657577321358E+03 RG= 3.296690480634949E+08 RR=-3.475258296818651E+00
+
 Dates{1} = MakeDate(1989,10,18);
 Dates{2} = MakeDate(1990,2,10);
 Dates{3} = MakeDate(1990,12,8);
@@ -64,7 +71,9 @@ for Lv1 = 1:6
     if ~strcmpi(PlanetOrder{Lv1}, 'Gaspra')
         [COE{Lv1}, r{Lv1}, v{Lv1},~] = EZ_States(PlanetOrder{Lv1},Dates{Lv1});
     else 
-        % EZ_States/planet_elements_and_sv does not work the same for Gaspra:
+        %  X = 7.483782491348745E+07 Y =-3.208504326714966E+08 Z = 1.166109205102742E+07
+
+        % EZ_States/planet_elements_and_sv does not work for Gaspra:
         % [h e RA incl w TA a w_hat L M E]
         COE{Lv1} = [];
         r{Lv1} = [7.483782491348745e7, -3.208504326714966e8, 0];
@@ -110,22 +119,20 @@ for Lv1 = 1:5
         pad(sprintf('%.4f',V2(2)),9,'left')
         ];
     disp(row2)
-    if Lv1 ~= 4 || Lv1 ~= 3 
+    if Lv1 ~= 4
         [TA1{Lv1}, TA2{Lv1}, h{Lv1}, e{Lv1}, RA{Lv1}, w{Lv1}, DCM{Lv1}, aloop{Lv1}] = plotConicSaveVars(r1,r2,deltaT,Sun.mu,Lv1,fig);
-        % Plots the conics on top of basicPlanetPlotting
+                % Plots the conics on top of basicPlanetPlotting
     else
         GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
-
+        SHOEMAKERTable = readmatrix('horizons_results_SHOEMAKER_position_data.txt');
+        IDATable =  readmatrix('horizons_results_IDA_position_data.txt');
         [TA1{Lv1+10}, TA2{Lv1+10}, h{Lv1+10}, e{Lv1+10}, RA{Lv1+10}, w{Lv1+10}, DCM{Lv1+10}, aloop{Lv1+10}] = plotConicSaveVars(r1,GetLocGASPRA(Dates{Lv1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig);
         [TA1{Lv1+10}, TA2{Lv1+20}, h{Lv1+20}, e{Lv1+20}, RA{Lv1+20}, w{Lv1+20}, DCM{Lv1+20}, aloop{Lv1+20}] = plotConicSaveVars(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig);
+        plot3(GaspraTable(:,2),GaspraTable(:,3),GaspraTable(:,4),"Color",'#404040',"LineStyle",'--') % Plot of all of Gasparas Data
+        plot3(SHOEMAKERTable(:,2),SHOEMAKERTable(:,3),SHOEMAKERTable(:,4),'k',"LineStyle",'--') % Plot of all of Gasparas Data
+        plot3(IDATable(:,2),IDATable(:,3),IDATable(:,4),"Color",'#808080',"LineStyle",'--') % Plot of all of Gasparas Data
     end
 end
-GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
-SHOEMAKERTable = readmatrix('horizons_results_SHOEMAKER_position_data.txt');
-IDATable =  readmatrix('horizons_results_IDA_position_data.txt');
-plot3(GaspraTable(:,2),GaspraTable(:,3),GaspraTable(:,4),"Color",'k',"LineStyle",'--') % Plot of all of Gasparas Data
-plot3(SHOEMAKERTable(:,2),SHOEMAKERTable(:,3),SHOEMAKERTable(:,4),"Color",'#404040',"LineStyle",'--') % Plot of all of SHOEMAKER Data
-plot3(IDATable(:,2),IDATable(:,3),IDATable(:,4),"Color",'#808080',"LineStyle",'--') % Plot of all of IDA Data
 
 
 %% Table 3:
@@ -206,7 +213,7 @@ hold off
 figure(fig);
 hold on;   axis equal; grid on;
 legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location / Departure / Arrival','','','','','',...
-    'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer','Gaspra','Shoemaker','Ida'},...
+    'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer'},...
     'Location','bestoutside')
 title("Mission Design Plot: Progress Report 2")
 %% Functions:

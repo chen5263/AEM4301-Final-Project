@@ -14,6 +14,6 @@ function rGaspra = GetLocGASPRA(date, GaspraTable)
         error('Outside Gaspra data range')
     else
         index = 1 + days(date-StartDate);
-        rGaspra = GaspraTable(index, 2:end);
+        rGaspra = [GaspraTable(index, 2:3),0];
     end
 end

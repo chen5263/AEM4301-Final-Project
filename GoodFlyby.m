@@ -159,7 +159,7 @@ if nargout == 4
     xlabel('X (km/s)');
     ylabel('Y (km/s)');
     zlabel('Z (km/s)');
-    legend("V_{planet}","V_{prior}","V_{post}","V_\infty^-","V_\infty^+","\Delta V");
+    legend("V_{planet}","V_{sc / sun}^{ -}","V_{sc / sun}^{ +}","V_{\infty / planet}^{ -}","V_{\infty / planet}^{ +}","\Delta V");
 end
 
 %%
