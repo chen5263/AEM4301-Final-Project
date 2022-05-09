@@ -1,4 +1,4 @@
-function [TA1, TA2, h, e, RA, w, DCM] = plotConicSaveVars(R1, R2, t, mu, number, fig)
+function [TA1, TA2, h, e, RA, w, DCM, a] = plotConicSaveVars(R1, R2, t, mu, number, fig)
     if ~exist('number','var')
         number = 0;
     end
@@ -14,7 +14,9 @@ function [TA1, TA2, h, e, RA, w, DCM] = plotConicSaveVars(R1, R2, t, mu, number,
     TA1 = coe1(6);
     coe2 = coe_from_sv(R2,V2,mu);
     TA2 = coe2(6);
-    p = (h^2/mu); 
+    p = (h^2/mu);
+    a = coe1(7);
+    
     while TA1 > TA2
         TA2 = TA2 + 2*pi;
     end
