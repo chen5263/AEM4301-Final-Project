@@ -2,6 +2,9 @@
 % code to determine the closest distance between an object and the asteroid
 % and the time that occurs
 
+TA1 = transfer.TA1;
+TA2 = transfer.TA2;
+
 h = transfer.h;
 e = transfer.e;
 RA = transfer.RA;
@@ -9,10 +12,8 @@ incl = transfer.incl;
 w = transfer.w;
 TA1 = transfer.RA1;
 coe2 = coe_from_sv(R2,V2,mu);
-TA2 = transfer.TA2;
+TA2 = coe2(6);
 p = (h^2/mu); 
-
-
 
 approx.shoe = 0;
 approx.shoeloc = [0,0,0];
