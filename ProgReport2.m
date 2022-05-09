@@ -184,14 +184,38 @@ fprintf('Gaspra Flyby:    dV= %.4f\n', dV.Gaspra)
 fprintf('Earth3 flyby:    dV= %.4f\n', dV.Earth3)
 fprintf('Jupiter Capture: dV= %.4f\n', dV.Jupiter)
 
+% add solar direction
+figure(2); 
+hold on;
+text(15,-20,0,'o','Color','y'); % change manually
+text(15-10,-20,0,'"direction" of the sun'); % change manually
+hold off
+
+figure(3);
+hold on;
+text(-20,-10,0,'o','Color','y'); % change manually
+text(-20-7.5,-10,0,'"direction" of the sun'); % change manually
+hold off
+
+figure(4);
+hold on;
+text(7,5,0,'o','Color','y'); % change manually
+text(7-3.25,5,0,'"direction" of the sun'); % change manually
+hold off
+
+figure(5);
+hold on;
+text(-25,-10,0,'o','Color','y'); % change manually
+text(-25-8,-10,0,'"direction" of the sun'); % change manually
+hold off
+
 %% Formatting Plots
 figure(fig);
 hold on;   axis equal; grid on;
-legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location \ Departure \ Arrival','','','','','',...
+legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location / Departure / Arrival','','','','','',...
     'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer'},...
     'Location','bestoutside')
 title("Mission Design Plot: Progress Report 2")
-
 %% Functions:
 function [J2000x, J2000y, J2000z] = GetPos(Planet,DateTime)
 try

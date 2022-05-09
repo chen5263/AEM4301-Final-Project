@@ -156,8 +156,10 @@ if nargout == 4
             fig.dV = EZquiver3(Vplanet+vinf_post_dark,dV_vector, fig.fig);
         end
     end
-
-    legend("V_{planet}","V_{prior}","V_{post}","V_\infty^-","V_\infty^+","\Delta V")
+    xlabel('X (km/s)');
+    ylabel('Y (km/s)');
+    zlabel('Z (km/s)');
+    legend("V_{planet}","V_{prior}","V_{post}","V_\infty^-","V_\infty^+","\Delta V");
 end
 
 %%

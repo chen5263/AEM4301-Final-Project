@@ -83,5 +83,5 @@ for oi = 1:size(datesObjects,1)
     textToAdd = sprintf('%d-%d-%d\n %c' ,  datesObjects(oi,1:3), charObjects(oi));
     text(rObject(oi,1),rObject(oi,2),rObject(oi,3),textToAdd);
     axis equal; view(0,90);
-    xlabel('X (km)');   ylabel('Y (km)');
+    xlabel('X (km)');   ylabel('Y (km)');   zlabel('Z (km)');
 end
