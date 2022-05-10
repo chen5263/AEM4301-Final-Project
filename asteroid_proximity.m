@@ -136,9 +136,6 @@ while(current_day <= end_day)
             gaspra_close = gaspra_dis;
         end
         if(gaspra_dis_zero < gaspra_close_2d)
-            current_pos
-            gaspra_pos_zero
-            
             gaspra_close_2d = gaspra_dis_zero;
         end
     end

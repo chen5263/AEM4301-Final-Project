@@ -218,10 +218,18 @@ title("Mission Design Plot: Progress Report 2")
 [gaspra_5,ida_5,shoe_5] = asteroid_proximity(5,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
 
 disp("Here are the closest distances that we get to each asteroid in km.");
-gaspra_closest = min([gaspra_3,gaspra_4,gaspra_5])
-ida_closest = min([ida_3,ida_4,ida_5])
-shoemaker_closest = min([shoe_3,shoe_4,shoe_5])
-gaspra_closest_2d = g_z_3
+gaspra_closest = min([gaspra_3,gaspra_4,gaspra_5]);
+ida_closest = min([ida_3,ida_4,ida_5]);
+shoemaker_closest = min([shoe_3,shoe_4,shoe_5]);
+gaspra_closest_2d = g_z_3;
+disp("Gaspra:");
+disp(gaspra_closest);
+disp("Ida:");
+disp(ida_closest);
+disp("Shoemaker:");
+disp(shoemaker_closest);
+disp("Gaspra if z was zero:");
+disp(g_z_3);
 
 %% Functions:
 function [J2000x, J2000y, J2000z] = GetPos(Planet,DateTime)
