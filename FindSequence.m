@@ -85,7 +85,7 @@ if PlotFlag
     dir2 = EZquiver3(startVec,Dir2Sun*(1/9)*(xscale(2)-xscale(1)),figures{3});
     dir2.Color = 'r';
     dir2.LineWidth = 1;
-    figures{2}.legend.String{4} = 'To Sun';
+%     figures{3}.legend.String{4} = 'To Sun';
     xlim(xscale); ylim(yscale); zlim(zscale);
     title('Gaspra Maneuver');
 
@@ -97,7 +97,7 @@ if PlotFlag
     dir2 = EZquiver3(startVec,Dir2Sun*(1/9)*(xscale(2)-xscale(1)),figures{4}.fig);
     dir2.Color = 'r';
     dir2.LineWidth = 1;
-    figures{2}.legend.String{7} = 'To Sun';
+    figures{4}.legend.String{7} = 'To Sun';
     xlim(xscale); ylim(yscale); zlim(zscale);
     title('Second Earth Flyby'); subtitle(dV.Earth3Side)
 
