@@ -52,6 +52,8 @@ ida_start = 828;
 ida_end = 2242;
 shoemaker_start = 1717;
 shoemaker_end = 1734;
+gaspra_start = 417;
+gaspra_end = 1148;
 
 gaspra_close = 10^30;
 ida_close = 10^30;
@@ -130,39 +132,38 @@ for j=1:length(theta_values)
     r_y(j) = storage(2);
     r_z(j) = storage(3);
 end
-%{
-figure();
-axis equal;
-hold on; 
-plot3(r_x,r_y,r_z,'-','Color','red');
-%}
 
 %% Determining closest distance
 
 current_day = start_day;
 
-while(current_day < end_day)
+while(current_day <= end_day)
     i = current_day - start_day+1;
     current_pos = [r_x(i),r_y(i),r_z(i)];
     if(current_day > gaspra_start && current_day < gaspra_end)
-        gaspra_pos = [GaspraTable.Var2{current_day-gaspra_start},GaspraTable.Var3{current_day-gaspra_start},GaspraTable.Var4{current_day-gaspra_start}];
-        gaspra_dis = norm(current_pos-ida_pos);
+        gaspra_pos = [GaspraTable.Var2(current_day-gaspra_start),GaspraTable.Var3(current_day-gaspra_start),GaspraTable.Var4(current_day-gaspra_start)];
+        
+        gaspra_dis = norm(current_pos-gaspra_pos);
         if(gaspra_dis < gaspra_close)
-            gasp_close = ida_dis
+            gaspra_close = gaspra_dis;
+            gaspra_day = current_day;
+            current_pos
+            gaspra_pos
         end
     end
+    
     if(current_day > ida_start && current_day < ida_end)
         ida_pos = [IdaTable.Var2{current_day-ida_start},IdaTable.Var3{current_day-ida_start},IdaTable.Var4{current_day-ida_start}];
         ida_dis = norm(current_pos-ida_pos);
         if(ida_dis < ida_close)
-            ida_close = ida_dis
+            ida_close = ida_dis;
         end
     end
     if(current_day > shoemaker_start && current_day < shoemaker_end)
         shoe_pos = [ShoeTable.Var2{current_day-shoemaker_start},ShoeTable.Var3{current_day-shoemaker_start},ShoeTable.Var4{current_day-shoemaker_start}];
         shoe_dis = norm(current_pos-shoe_pos);
         if(shoe_dis < shoemaker_close)
-            shoemaker_close = shoe_dis
+            shoemaker_close = shoe_dis;
         end
     end
     
@@ -171,6 +172,7 @@ while(current_day < end_day)
     current_day = current_day + 1;
 end
 
+gaspra_close
 
 %{
 vec_gaspra = [loc(1)-GaspraTable.Var2,loc(2)-GaspraTable.Var3,loc(3)-GaspraTable.Var4];

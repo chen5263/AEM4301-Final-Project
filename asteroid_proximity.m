@@ -142,6 +142,7 @@ while(current_day <= end_day)
     current_pos = [r_x(i),r_y(i),r_z(i)];
     if(current_day > gaspra_start && current_day < gaspra_end)
         gaspra_pos = [GaspraTable.Var2(current_day-gaspra_start),GaspraTable.Var3(current_day-gaspra_start),GaspraTable.Var4(current_day-gaspra_start)];
+        
         gaspra_dis = norm(current_pos-gaspra_pos);
         if(gaspra_dis < gaspra_close)
             gaspra_close = gaspra_dis;
