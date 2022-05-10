@@ -16,7 +16,7 @@ function E = kepler_E(e, M)
 
 % ---------------------------------------------- 
 %...Set an error tolerance: 
-error = 1.e-8; 
+error = 1.e-14; 
 
 %...Select a starting value for E: 
 if M < pi 
