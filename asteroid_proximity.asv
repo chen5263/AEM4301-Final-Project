@@ -2,9 +2,6 @@
 % code to determine the closest distance between an object and the asteroid
 % and the time that occurs
 
-TA1 = transfer.TA1;
-TA2 = transfer.TA2;
-
 h = transfer.h;
 e = transfer.e;
 RA = transfer.RA;
@@ -12,7 +9,7 @@ incl = transfer.incl;
 w = transfer.w;
 TA1 = transfer.RA1;
 coe2 = coe_from_sv(R2,V2,mu);
-TA2 = coe2(6);
+TA2 = transfer.TA2;
 p = (h^2/mu); 
 
 approx.shoe = 0;
@@ -80,17 +77,6 @@ if ~exist('number','var')
     number = 0;
 end
 
-[V1, V2] = lambertCurtis(mu, R1, R2, t, 'pro');
-coe1 = coe_from_sv(R1,V1,mu);
-h = coe1(1);
-e = coe1(2);
-RA = coe1(3);
-incl = coe1(4);
-w = coe1(5);
-TA1 = coe1(6);
-coe2 = coe_from_sv(R2,V2,mu);
-TA2 = coe2(6);
-p = (h^2/mu); 
 while TA1 > TA2
     TA2 = TA2 + 2*pi;
 end

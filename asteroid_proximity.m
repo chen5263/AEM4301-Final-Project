@@ -2,17 +2,23 @@
 % code to determine the closest distance between an object and the asteroid
 % and the time that occurs
 
+transfer.h = h(3);
+transfer.e = e(3);
+transfer.RA = RA(3);
+%transfer.incl = incl(3);
+transfer.w = w(3);
+transfer.TA1 = TA1(3);
+transfer.TA2 = TA2(3);
+
+mu = 132712440018;
 h = transfer.h;
 e = transfer.e;
 RA = transfer.RA;
-incl = transfer.incl;
+%incl = transfer.incl;
 w = transfer.w;
 TA1 = transfer.RA1;
-coe2 = coe_from_sv(R2,V2,mu);
 TA2 = transfer.TA2;
 p = (h^2/mu); 
-
-
 
 approx.shoe = 0;
 approx.shoeloc = [0,0,0];
@@ -25,7 +31,7 @@ approx.idatime = 0;
 day = 417;
 final_day = 2242;
 
-% what day we get to gaspra
+% when do we go to earth
 earth1 = 417;
 earth2 = 1148;
 
@@ -55,6 +61,31 @@ for Lv1 = 1:6
     end
 end
 
+%% Determining theta values
+
+% time is in seconds
+T = 2*pi*a^(3/2)/sqrt(mu);
+
+E_start = 2*atan(sqrt((1-e)/1+e)*tan(TA1));
+E_end = 2*atan(sqrt((1-e)/1+e)*tan(TA2));
+
+Me_start = E_start - e * E_start;
+Me_end = E_end - e * E_end;
+
+t_current = Me_start*T/(2*pi);
+
+i = 1;
+Me_current = Me_start;
+
+while(current < Me_end)
+    Me_values(i) = Me_current;
+    Me_current = 2*pi*(t_current)/T;
+    t_current = t_current + 86400;
+    i = i + 1;
+end
+
+
+%{
 COE = {};
 r = {};
 v = {};
@@ -79,17 +110,6 @@ if ~exist('number','var')
     number = 0;
 end
 
-[V1, V2] = lambertCurtis(mu, R1, R2, t, 'pro');
-coe1 = coe_from_sv(R1,V1,mu);
-h = coe1(1);
-e = coe1(2);
-RA = coe1(3);
-incl = coe1(4);
-w = coe1(5);
-TA1 = coe1(6);
-coe2 = coe_from_sv(R2,V2,mu);
-TA2 = coe2(6);
-p = (h^2/mu); 
 while TA1 > TA2
     TA2 = TA2 + 2*pi;
 end
@@ -116,9 +136,8 @@ for j=1:1:1e3
     r_y(j) = storage(2);
     r_z(j) = storage(3);
 end
-figure(fig);
-hold on; 
-plot3(r_x,r_y,r_z,'-','Color',cell2mat(conicColor(number+1)));
+
+
 
 % data file reading
 GaspraTable =  readtable('horizons_results_GASPRA_position_data.txt');
@@ -187,4 +206,5 @@ catch
     J2000y = 0;
     J2000z = 0;
 end
+%}
 end
