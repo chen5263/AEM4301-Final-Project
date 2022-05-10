@@ -1,4 +1,4 @@
-function [gaspra_close,shoemaker_close,ida_close,gaspra_close_2d] = asteroid_proximity(transfer,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop)
+function [gaspra_close,shoemaker_close,ida_close,gaspra_close_2d,gaspra_day,shoemaker_day,ida_day] = asteroid_proximity(transfer,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop)
 % code to determine the closest distance between an object and the asteroid
 % and the time that occurs
 
@@ -54,6 +54,10 @@ gaspra_close = 10^30;
 ida_close = 10^30;
 shoemaker_close = 10^30;
 gaspra_close_2d = 10^30;
+
+gaspra_day = -1;
+shoemaker_day = -1;
+ida_day = -1;
 
 %% Determining theta values
 
@@ -134,6 +138,7 @@ while(current_day <= end_day)
         
         if(gaspra_dis < gaspra_close)
             gaspra_close = gaspra_dis;
+            gaspra_day = current_day;
         end
         if(gaspra_dis_zero < gaspra_close_2d)
             gaspra_close_2d = gaspra_dis_zero;
@@ -145,6 +150,7 @@ while(current_day <= end_day)
         ida_dis = norm(current_pos-ida_pos);
         if(ida_dis < ida_close)
             ida_close = ida_dis;
+            ida_day = current_day;
         end
     end
     
@@ -153,6 +159,7 @@ while(current_day <= end_day)
         shoe_dis = norm(current_pos-shoe_pos);
         if(shoe_dis < shoemaker_close)
             shoemaker_close = shoe_dis;
+            shoemaker_day = current_day;
         end
     end
     

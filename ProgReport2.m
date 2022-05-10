@@ -213,9 +213,9 @@ title("Mission Design Plot: Progress Report 2")
 
 %% Asteroid Proximity Code
 
-[gaspra_3,ida_3,shoe_3,g_z_3] = asteroid_proximity(3,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
-[gaspra_4,ida_4,shoe_4] = asteroid_proximity(4,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
-[gaspra_5,ida_5,shoe_5] = asteroid_proximity(5,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+[gaspra_3,shoe_3,ida_3,g_z_3,gd3,sd3,id3] = asteroid_proximity(3,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop)
+[gaspra_4,shoe_4,ida_4,g_z_4,gd4,sd4,id4] = asteroid_proximity(4,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop)
+[gaspra_5,shoe_5,ida_5,g_z_5,gd5,sd5,id5] = asteroid_proximity(5,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop)
 
 disp("Here are the closest distances that we get to each asteroid in km.");
 gaspra_closest = min([gaspra_3,gaspra_4,gaspra_5]);
