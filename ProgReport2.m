@@ -1,4 +1,4 @@
-% DEAD FILE
+%% (CHANGE TITLE) Orbital Mechanics Final Project - Galileo Dates
 % 
 % Orbital Mechanics Final Project
 % Logan Anderson
@@ -112,11 +112,12 @@ for Lv1 = 1:5
     disp(row2)
     if Lv1 ~= 4 || Lv1 ~= 3 
         [TA1{Lv1}, TA2{Lv1}, hloop{Lv1}, eloop{Lv1}, RAloop{Lv1}, wloop{Lv1}, DCM{Lv1}, aloop{Lv1}, inclloop{Lv1}] = plotConicSaveVars(r1,r2,deltaT,Sun.mu,Lv1,fig);
-        % Plots the conics on top of basicPlanetPlotting
+        % Plots the conics on top of basicPlanetPlotting and stores variables for use in asteroid proximity
     else
         GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
         [TA1{Lv1-1}, TA2{Lv1-1}, hloop{Lv1-1}, eloop{Lv1-1}, RAloop{Lv1-1}, wloop{Lv1-1}, DCM{Lv1-1}, aloop{Lv1-1}, inclloop{Lv1}] = plotConicSaveVars(r1,GetLocGASPRA(Dates{Lv1-1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig);
         [TA1{Lv1}, TA2{Lv1}, hloop{Lv1}, eloop{Lv1}, RAloop{Lv1}, wloop{Lv1}, DCM{Lv1}, aloop{Lv1}, inclloop{Lv1}] = plotConicSaveVars(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig);
+        % Handles Gaspra Velocity Change
     end
 end
 GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
@@ -164,10 +165,10 @@ for Lv1 = 1:5
     disp(row2)
 end
 
-%%
 
 %% Vector Diagrams
-[dV, figures] = FindSequence(Dates{1},Dates{2},Dates{3},Dates{4},Dates{5},Dates{6}, true);
+[dV, figures] = FindSequence(Dates{1},Dates{2},Dates{3},Dates{4},Dates{5},Dates{6}, true); 
+% Plots the vector diagram and calculates the delta V for each flyby given the 6 dates
 fprintf('Total dV: %.4f\n', dV.Net)
 fprintf('Earth Departure: dV= %.4f\n', dV.Earth1)
 fprintf('Venus Flyby:     dV= %.4f\n', dV.Venus)
@@ -176,7 +177,7 @@ fprintf('Gaspra Flyby:    dV= %.4f\n', dV.Gaspra)
 fprintf('Earth3 flyby:    dV= %.4f\n', dV.Earth3)
 fprintf('Jupiter Capture: dV= %.4f\n', dV.Jupiter)
 
-% add solar direction
+% Add solar direction for clarity (not exact, just for reference)
 figure(2); 
 hold on;
 text(15,-20,0,'o','Color','y'); % change manually
@@ -201,7 +202,7 @@ text(-25,-10,0,'o','Color','y'); % change manually
 text(-25-8,-10,0,'"direction" of the sun'); % change manually
 hold off
 
-%% Formatting Plots
+%% Formatting Mission Design Plot
 figure(fig);
 hold on;   axis equal; grid on;
 legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location / Departure / Arrival','','','','','',...
