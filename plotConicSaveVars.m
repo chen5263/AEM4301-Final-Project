@@ -1,4 +1,4 @@
-function [TA1, TA2, h, e, RA, w, DCM, a] = plotConicSaveVars(R1, R2, t, mu, number, fig)
+function [TA1, TA2, h, e, RA, w, DCM, a, incl] = plotConicSaveVars(R1, R2, t, mu, number, fig)
     if ~exist('number','var')
         number = 0;
     end

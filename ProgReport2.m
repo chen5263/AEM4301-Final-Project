@@ -111,12 +111,12 @@ for Lv1 = 1:5
         ];
     disp(row2)
     if Lv1 ~= 4 || Lv1 ~= 3 
-        [TA1{Lv1}, TA2{Lv1}, hloop{Lv1}, eloop{Lv1}, RAloop{Lv1}, w{Lv1}, DCM{Lv1}, aloop{Lv1}] = plotConicSaveVars(r1,r2,deltaT,Sun.mu,Lv1,fig);
+        [TA1{Lv1}, TA2{Lv1}, hloop{Lv1}, eloop{Lv1}, RAloop{Lv1}, wloop{Lv1}, DCM{Lv1}, aloop{Lv1}, inclloop{Lv1}] = plotConicSaveVars(r1,r2,deltaT,Sun.mu,Lv1,fig);
         % Plots the conics on top of basicPlanetPlotting
     else
         GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');
-        [TA1{Lv1-1}, TA2{Lv1-1}, hloop{Lv1-1}, eloop{Lv1-1}, RAloop{Lv1-1}, w{Lv1-1}, DCM{Lv1-1}, aloop{Lv1-1}] = plotConicSaveVars(r1,GetLocGASPRA(Dates{Lv1-1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig);
-        [TA1{Lv1}, TA2{Lv1}, hloop{Lv1}, eloop{Lv1}, RAloop{Lv1}, w{Lv1}, DCM{Lv1}, aloop{Lv1}] = plotConicSaveVars(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig);
+        [TA1{Lv1-1}, TA2{Lv1-1}, hloop{Lv1-1}, eloop{Lv1-1}, RAloop{Lv1-1}, wloop{Lv1-1}, DCM{Lv1-1}, aloop{Lv1-1}, inclloop{Lv1}] = plotConicSaveVars(r1,GetLocGASPRA(Dates{Lv1-1}, GaspraTable),deltaT,Sun.mu,Lv1-1,fig);
+        [TA1{Lv1}, TA2{Lv1}, hloop{Lv1}, eloop{Lv1}, RAloop{Lv1}, wloop{Lv1}, DCM{Lv1}, aloop{Lv1}, inclloop{Lv1}] = plotConicSaveVars(GetLocGASPRA(Dates{Lv1}, GaspraTable),r2,deltaT,Sun.mu,Lv1,fig);
     end
 end
 GaspraTable = readmatrix('horizons_results_GASPRA_position_data.txt');

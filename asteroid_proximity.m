@@ -2,18 +2,18 @@
 % code to determine the closest distance between an object and the asteroid
 % and the time that occurs
 
-transfer.h = h(3);
+transfer.h = hloop(3);
 transfer.e = eloop(3);
-%transfer.RA = RA(3);
+transfer.RA = RAloop(3);
 %transfer.incl = incl(3);
-transfer.w = w(3);
+transfer.w = wloop(3);
 transfer.TA1 = TA1(3);
 transfer.TA2 = TA2(3);
 
 mu = 132712440018;
 h = transfer.h;
 e = transfer.e;
-%RA = transfer.RA;
+RA = transfer.RA;
 %incl = transfer.incl;
 w = transfer.w;
 TA1 = transfer.TA1;
