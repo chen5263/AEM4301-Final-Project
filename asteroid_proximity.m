@@ -3,8 +3,8 @@
 % and the time that occurs
 
 transfer.h = h(3);
-transfer.e = e(3);
-transfer.RA = RA(3);
+transfer.e = eloop(3);
+%transfer.RA = RA(3);
 %transfer.incl = incl(3);
 transfer.w = w(3);
 transfer.TA1 = TA1(3);
@@ -13,10 +13,10 @@ transfer.TA2 = TA2(3);
 mu = 132712440018;
 h = transfer.h;
 e = transfer.e;
-RA = transfer.RA;
+%RA = transfer.RA;
 %incl = transfer.incl;
 w = transfer.w;
-TA1 = transfer.RA1;
+TA1 = transfer.TA1;
 TA2 = transfer.TA2;
 p = (h^2/mu); 
 
@@ -207,4 +207,4 @@ catch
     J2000z = 0;
 end
 %}
-end
+%end
