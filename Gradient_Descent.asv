@@ -39,8 +39,6 @@ plot(dVscore,'xk:');
 xlabel('run#')
 ylabel('\Delta V (km/s)')
 grid on
-%%
-[dV, ~] = FindSequence(D1,d2,d3,d4,d5,D6, PlotFlag);
 
 % dV = bestdV;
 % fprintf('Total dV: %.4f\n', dV.Net)
