@@ -209,6 +209,19 @@ legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location / Departure / Arri
     'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer','Gaspra','Shoemaker','Ida'},...
     'Location','bestoutside')
 title("Mission Design Plot: Progress Report 2")
+
+%% Asteroid Proximity Code
+
+[gaspra_3,ida_3,shoe_3,g_z_3] = asteroid_proximity(3,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+[gaspra_4,ida_4,shoe_4] = asteroid_proximity(4,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+[gaspra_5,ida_5,shoe_5] = asteroid_proximity(5,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+
+disp("Here are the closest distances that we get to each asteroid in km.");
+gaspra_closest = min([gaspra_3,gaspra_4,gaspra_5])
+ida_closest = min([ida_3,ida_4,ida_5])
+shoemaker_closest = min([shoe_3,shoe_4,shoe_5])
+gaspra_closest_2d = g_z_3
+
 %% Functions:
 function [J2000x, J2000y, J2000z] = GetPos(Planet,DateTime)
 try
