@@ -55,12 +55,12 @@ v_dVpost_dark = vVinf_post-vinf_post_dark;
 if norm(v_dVpost_light) < norm(v_dVpost_dark)
     dV_scalar = norm(v_dVpost_light);
     dV_vector = v_dVpost_light;
-    side = 'light side (dV after)';
+    side = 'Light side (\Delta V after)';
     lightside = 1;
 else
     dV_scalar = norm(v_dVpost_dark);
     dV_vector = v_dVpost_dark;
-    side = 'dark side (dV after)';
+    side = 'Dark side (\Delta V after)';
     lightside = 0;
 end
 After.dV_scalar = dV_scalar;
@@ -99,12 +99,12 @@ v_dVprior_dark =  vinf_prior_dark  - vVinf_prior;
 if norm(v_dVprior_light) < norm(v_dVprior_dark)
     dV_scalar = norm(v_dVprior_light);
     dV_vector = v_dVprior_light;
-    side = 'light side (dV before)';
+    side = 'Light side (\Delta V before)';
     lightside = 1;
 else
     dV_scalar = norm(v_dVprior_dark);
     dV_vector = v_dVprior_dark;
-    side = 'dark side (dV before)';
+    side = 'Dark side (\Delta V before)';
     lightside = 0;
 end
 Before.dV_scalar = dV_scalar;
@@ -159,7 +159,7 @@ if nargout == 4
     xlabel('X (km/s)');
     ylabel('Y (km/s)');
     zlabel('Z (km/s)');
-    legend("V_{planet}","V_{sc / sun}^{ -}","V_{sc / sun}^{ +}","V_{\infty / planet}^{ -}","V_{\infty / planet}^{ +}","\Delta V");
+    fig.legend = legend("V_{planet}","V_{sc / sun}^{ -}","V_{sc / sun}^{ +}","V_{\infty / planet}^{ -}","V_{\infty / planet}^{ +}","\Delta V");
 end
 
 %%
