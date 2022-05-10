@@ -177,30 +177,31 @@ fprintf('Gaspra Flyby:    dV= %.4f\n', dV.Gaspra)
 fprintf('Earth3 flyby:    dV= %.4f\n', dV.Earth3)
 fprintf('Jupiter Capture: dV= %.4f\n', dV.Jupiter)
 
-% Add solar direction for clarity (not exact, just for reference)
-figure(2); 
-hold on;
-text(15,-20,0,'o','Color','y'); % change manually
-text(15-10,-20,0,'"direction" of the sun'); % change manually
-hold off
-
-figure(3);
-hold on;
-text(-20,-10,0,'o','Color','y'); % change manually
-text(-20-7.5,-10,0,'"direction" of the sun'); % change manually
-hold off
-
-figure(4);
-hold on;
-text(7,5,0,'o','Color','y'); % change manually
-text(7-3.25,5,0,'"direction" of the sun'); % change manually
-hold off
-
-figure(5);
-hold on;
-text(-25,-10,0,'o','Color','y'); % change manually
-text(-25-8,-10,0,'"direction" of the sun'); % change manually
-hold off
+% These were the predecessor to the "To Sun" arrow in the plot
+% % Add solar direction for clarity (not exact, just for reference)
+% figure(2); 
+% hold on;
+% text(15,-20,0,'o','Color','y'); % change manually
+% text(15-10,-20,0,'"direction" of the sun'); % change manually
+% hold off
+% 
+% figure(3);
+% hold on;
+% text(-20,-10,0,'o','Color','y'); % change manually
+% text(-20-7.5,-10,0,'"direction" of the sun'); % change manually
+% hold off
+% 
+% figure(4);
+% hold on;
+% text(7,5,0,'o','Color','y'); % change manually
+% text(7-3.25,5,0,'"direction" of the sun'); % change manually
+% hold off
+% 
+% figure(5);
+% hold on;
+% text(-25,-10,0,'o','Color','y'); % change manually
+% text(-25-8,-10,0,'"direction" of the sun'); % change manually
+% hold off
 
 %% Formatting Mission Design Plot
 figure(fig);

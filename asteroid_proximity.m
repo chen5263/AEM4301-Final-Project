@@ -60,7 +60,7 @@ gaspra_close_2d = 10^30;
 % time is in seconds
 T = 2*pi*a_t^(3/2)/sqrt(mu);
 
-E_start = 2*atan(sqrt((1-e_t)/(1+e_t))*tan(TA1_t/2));
+E_start = 2*atan( sqrt((1-e_t)/(1+e_t)) * tan(TA1_t/2) );
 E_end = 2*atan(sqrt((1-e_t)/(1+e_t))*tan(TA2_t/2));
 
 Me_start = E_start - e_t * sin(E_start);

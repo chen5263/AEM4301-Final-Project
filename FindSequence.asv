@@ -57,7 +57,7 @@ if PlotFlag
     figure(figures{1}.fig);
     Dir2Sun = -rVenus./norm(rVenus); 
     xscale = xlim(); yscale = ylim(); zscale = zlim();
-    startVec = [0.125*xscale(1)+0.875*xscale(2), 0.7*yscale(1)+0.3*yscale(2), mean(zscale)];
+    startVec = [0.125*xscale(1)+0.875*xscale(2), 0.875*yscale(1)+0.125*yscale(2), mean(zscale)];
     dir1 = EZquiver3(startVec,Dir2Sun*(1/9)*(xscale(2)-xscale(1)),figures{1}.fig);
     dir1.Color = 'r';
     dir1.LineWidth = 1;
@@ -78,11 +78,11 @@ if PlotFlag
     title('First Earth Flyby'); subtitle(dV.Earth2Side)
     
     [dV.Gaspra, dV.GaspraVec, figures{3}] = changeVel(E2Gb,G2Ea);
-    figure(figures{3});
+    figure(figures{3}.fig);
     Dir2Sun = -rGaspra./norm(rGaspra); 
     xscale = xlim(); yscale = ylim(); zscale = zlim();
-    startVec = [0.125*xscale(1)+0.875*xscale(2), 0.7*yscale(1)+0.3*yscale(2), mean(zscale)];
-    dir2 = EZquiver3(startVec,Dir2Sun*(1/9)*(xscale(2)-xscale(1)),figures{3});
+    startVec = [0.125*xscale(1)+0.875*xscale(2), 0.875*yscale(1)+0.125*yscale(2), mean(zscale)];
+    dir2 = EZquiver3(startVec,Dir2Sun*(1/9)*(xscale(2)-xscale(1)),figures{3}.fig);
     dir2.Color = 'r';
     dir2.LineWidth = 1;
     figures{2}.legend.String{4} = 'To Sun';
@@ -93,7 +93,7 @@ if PlotFlag
     figure(figures{4}.fig);
     Dir2Sun = -r3Earth./norm(r3Earth); 
     xscale = xlim(); yscale = ylim(); zscale = zlim();
-    startVec = [0.125*xscale(1)+0.875*xscale(2), 0.7*yscale(1)+0.3*yscale(2), mean(zscale)];
+    startVec = [0.125*xscale(1)+0.875*xscale(2), 0.875*yscale(1)+0.125*yscale(2), mean(zscale)];
     dir2 = EZquiver3(startVec,Dir2Sun*(1/9)*(xscale(2)-xscale(1)),figures{4}.fig);
     dir2.Color = 'r';
     dir2.LineWidth = 1;
