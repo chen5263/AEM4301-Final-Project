@@ -24,24 +24,24 @@ a_t = aloop{transfer_num};
 
 p_t = (h_t^2/mu); 
 
+% when do we go to locations
+earth1 = 415;
+gaspra = 741;
+earth2 = 1145;
+jupiter = 2242;
+
 if(transfer_num == 3)
-    start_day = 417;
-    end_day = 742;
+    start_day = earth1;
+    end_day = gaspra;
 elseif(transfer_num == 4)
-    start_day = 742;
-    end_day = 1148;
+    start_day = gaspra;
+    end_day = earth2;
 elseif(transfer_num == 5)
-    start_day = 1148;
-    end_day = 2242;
+    start_day = earth2;
+    end_day = jupiter;
 else
     error("Not valid conic");
 end
-
-% when do we go to locations
-earth1 = 417;
-gaspra = 742;
-earth2 = 1148;
-jupiter = 2242;
 
 ida_start = 828;
 ida_end = 2242;

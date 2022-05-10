@@ -176,6 +176,27 @@ legend({'Sun','Earth','Venus','','','Jupiter','Flyby Location / Departure / Arri
     'Earth to Venus Transfer','Venus to Earth Transfer','Earth to Gaspra Transfer','Gaspra to Earth Transfer','Earth to Jupiter Transfer','Gaspra','Shoemaker','Ida'},...
     'Location','bestoutside')
 title("Mission Design Plot: Optimized Dates")
+
+%% Asteroid Proximity Code
+
+[gaspra_3,shoe_3,ida_3,g_z_3,gd3,sd3,id3] = asteroid_proximity(3,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+[gaspra_4,shoe_4,ida_4,g_z_4,gd4,sd4,id4] = asteroid_proximity(4,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+[gaspra_5,shoe_5,ida_5,g_z_5,gd5,sd5,id5] = asteroid_proximity(5,hloop,eloop,RAloop,inclloop,wloop,TA1,TA2,aloop);
+
+disp("Here are the closest distances that we get to each asteroid in km.");
+gaspra_closest = min([gaspra_3,gaspra_4,gaspra_5]);
+ida_closest = min([ida_3,ida_4,ida_5]);
+shoemaker_closest = min([shoe_3,shoe_4,shoe_5]);
+gaspra_closest_2d = g_z_3;
+disp("Gaspra:");
+disp(gaspra_closest);
+disp("Ida:");
+disp(ida_closest);
+disp("Shoemaker:");
+disp(shoemaker_closest);
+disp("Gaspra if z was zero:");
+disp(g_z_3);
+
 %% Functions:
 function [J2000x, J2000y, J2000z] = GetPos(Planet,DateTime)
 try
